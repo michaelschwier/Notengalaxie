@@ -54,8 +54,8 @@ function Sprite(options)
   this.image = options.image;
   this.x = options.x || 0;
   this.y = options.y || 0;
-  this.width = options.width;
-  this.height = options.height;
+  this.width = options.width || this.image.naturalWidth;
+  this.height = options.height || this.image.naturalHeight;
   this.clipX = options.clipX || 0;
   this.clipY = options.clipY || 0;
   this.clipWidth = options.clipWidth || this.image.naturalWidth;
@@ -199,7 +199,7 @@ function MultiFrameAnimatedSprite(options)
 // --------------------------------------------------------------------------
 // Movers implementing different strategies to move sprites automatically
 // --------------------------------------------------------------------------
-function LinearMover(sprite, timeForMove)
+function AbstractLinearMover(sprite, timeForMove)
 {
   this.sprite = sprite;
   this.startPosX = sprite.x;
@@ -242,7 +242,7 @@ function LinearMover(sprite, timeForMove)
 // --------------------------------------------------------------------------
 function ConstantMover(sprite, timeForMove)
 {
-  LinearMover.call(this, sprite, timeForMove);
+  AbstractLinearMover.call(this, sprite, timeForMove);
 
   this.getMoveVectorRatio = function()
   {
@@ -254,7 +254,7 @@ function ConstantMover(sprite, timeForMove)
 // --------------------------------------------------------------------------
 function SmoothMover(sprite, timeForMove)
 {
-  LinearMover.call(this, sprite, timeForMove);
+  AbstractLinearMover.call(this, sprite, timeForMove);
 
   this.getMoveVectorRatio = function()
   {
@@ -264,4 +264,55 @@ function SmoothMover(sprite, timeForMove)
     return normRatio;
   }
 }
+
+// --------------------------------------------------------------------------
+// GUI elements based on sprites so they can be used in a scene
+// --------------------------------------------------------------------------
+function Button(options, command)
+{
+  MultiFrameSprite.call(this, {
+    context: options.context,
+    x: options.x,
+    y: options.y,
+    width: options.width,
+    height: options.height,
+    image: options.image,
+    numberOfFrames: 2
+  });
+  this.command = command;
+  this.buttonReleaseTime = options.buttonReleaseTime || 0.1;
+  this.buttonReleaseCountDown = 0.0;    
+
+  this.super_update = this.update;
+  this.update = function(frameTime)
+  {
+    if (this.buttonReleaseCountDown > 0) {
+      this.setCurrentFrameIdx(1);
+      this.buttonReleaseCountDown -= frameTime;
+    }
+    else {
+      this.setCurrentFrameIdx(0);
+    }
+    this.super_update(frameTime);
+  }
+
+  this.isHit = function(x, y) 
+  {
+    if (x >= this.x && y >= this.y && x < this.x + this.width && y < this.y + this.height) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  this.handleMouseDown = function(e)
+  { 
+    if (this.isHit(e.canvasX, e.canvasY)) {
+      this.buttonReleaseCountDown = this.buttonReleaseTime;
+      this.command.execute();
+    }
+  }
+}
+
 

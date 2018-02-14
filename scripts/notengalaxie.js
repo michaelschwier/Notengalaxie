@@ -8,13 +8,37 @@
 
   
   // --------------------------------------------------------------------------
+  function Planet(options)
+  {
+    Sprite.call(this, {
+      context: canvas.getContext("2d"),
+      image: resources.getImage(options.image),
+      x: options.x,
+      y: -600
+    })
+    this.mover = new ConstantMover(this, 2.5);
+    this.mover.setNewTargetPos(this.x, 600);
+    this.audio = new Audio("audio/test.mp3");
+    this.audio.play();
+
+    this.update = function(frameTime)
+    {
+      this.mover.move(frameTime);      
+    }
+
+    this.gone = function()
+    {
+      return this.y >= 600;
+    }
+  }
+  
+  // --------------------------------------------------------------------------
   function Ship(options)
   {
     Sprite.call(this, {
       context: canvas.getContext("2d"),
-      width: 200,
-      height: 200,
       image: resources.getImage("ship"),
+      y: 250
     });
     this.mover = new SmoothMover(this, 0.5)
     
@@ -28,8 +52,7 @@
       this.mover.setNewTargetPos(x, y);
     }
   }
-  
-  
+
   // --------------------------------------------------------------------------
   function handleMouseMove(e)
   {
@@ -46,6 +69,18 @@
     e.canvasX = x;
     e.canvasY = y;
     gamePhase.handleMouseDown(e);
+  }
+  
+  // --------------------------------------------------------------------------
+  function MoveToCommand(receiver, x, y) {
+    this.receiver = receiver;
+    this.x = x;
+    this.y = y;
+
+    this.execute = function()
+    {
+      this.receiver.moveTo(x, y);
+    }
   }
   
   // --------------------------------------------------------------------------
@@ -70,7 +105,7 @@
       }
       if (delayUntilGame == 0) {
         document.getElementById("gameContainer").style.backgroundImage="none"; 
-        document.getElementById("gameContainer").style.background="black";
+        document.getElementById("gameContainer").style.background="white";
       }
     }
 
@@ -78,11 +113,48 @@
     {
       if (delayUntilGame < 0) 
       {
-        var ship = new Ship({
+        var background = new Sprite({
+          context: canvas.getContext("2d"),
+          image: resources.getImage("background"),    
         });
+        var ship = new Ship();
+        var cButton = new Button({
+          context: canvas.getContext("2d"),
+          image: resources.getImage("bc"),
+          x: 0,
+          y: 450,
+          width: 195,
+          height: 150
+          }, 
+          new MoveToCommand(ship, 0, 250)
+        );
+        var eButton = new Button({
+          context: canvas.getContext("2d"),
+          image: resources.getImage("be"),
+          x: 200,
+          y: 450,
+          width: 195,
+          height: 150
+          }, 
+          new MoveToCommand(ship, 200, 250)
+        );
+        var gButton = new Button({
+          context: canvas.getContext("2d"),
+          image: resources.getImage("bg"),
+          x: 400,
+          y: 450,
+          width: 195,
+          height: 150
+          }, 
+          new MoveToCommand(ship, 400, 250)
+        );
         
         return new MainGamePhase({
-          ship: ship
+          background: background,
+          ship: ship,
+          cButton: cButton,
+          eButton: eButton,
+          gButton: gButton
         });
       }
       else {
@@ -94,22 +166,32 @@
   // --------------------------------------------------------------------------
   function GamePhase(scene) 
   {
-    this.ship = scene.ship;
+    this.scene = scene;
 
     this.handleMouseMove = function(e)
     { }
 
     this.handleMouseDown = function(e)
-    { }
+    { 
+      for (var key in this.scene) {
+        if ("handleMouseDown" in this.scene[key]) {
+          this.scene[key].handleMouseDown(e);
+        }
+      }
+    }
     
     this.update = function(frameTime = 0)
     { 
-      this.ship.update(frameTime);
+      for (var key in this.scene) {
+        this.scene[key].update(frameTime);
+      }
     }
 
     this.render = function()
     { 
-      this.ship.render();
+      for (var key in this.scene) {
+        this.scene[key].render();
+      }
     }
 
     this.getNextGamePhase = function()
@@ -122,10 +204,21 @@
   function MainGamePhase(scene)
   {
     GamePhase.call(this, scene);
+    this.audio = new Audio("audio/background.mp3");
+    this.audio.volume = 0.6;
+    this.audio.loop = true;
+    this.audio.play();
 
-    this.handleMouseDown = function(e)
-    { 
-      this.ship.moveTo(e.canvasX - 100, e.canvasY - 100);
+
+    this.super_update = this.update;
+    this.update = function(frameTime)
+    {
+      if (!this.scene.planet || this.scene.planet.gone()) {
+        var choice = Math.floor(Math.random() * 3);
+        var img = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c1";
+        this.scene.planet = new Planet({image: img, x: 200 * choice});
+      }
+      this.super_update(frameTime);
     }
   }
 
@@ -192,7 +285,14 @@
   // START
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
-  resources.addImage("ship", "images/ship_600x600x1.png");
+  resources.addImage("background", "images/background_600x600x1.png")
+  resources.addImage("ship", "images/ship_200x169x1.png");
+  resources.addImage("bc", "images/c_200x150x2.png");
+  resources.addImage("be", "images/e_200x150x2.png");
+  resources.addImage("bg", "images/g_200x150x2.png");
+  resources.addImage("c1", "images/planet-c1_200x200x1.png");
+  resources.addImage("e", "images/planet-e_200x200x1.png");
+  resources.addImage("g", "images/planet-g_200x200x1.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
