@@ -202,11 +202,11 @@ function MultiFrameAnimatedSprite(options)
 function AbstractLinearMover(sprite, timeForMove)
 {
   this.sprite = sprite;
+  this.timeForMove = timeForMove;
   this.startPosX = sprite.x;
   this.startPosY = sprite.y;
   this.moveVectorX = 0;
   this.moveVectorY = 0;
-  this.timeForMove = timeForMove;
   this.currMoveTime = this.timeForMove;
 
   this.setNewTargetPos = function(x, y)
@@ -215,7 +215,9 @@ function AbstractLinearMover(sprite, timeForMove)
     this.startPosY = this.sprite.y;  
     this.moveVectorX = x - this.sprite.x;
     this.moveVectorY = y - this.sprite.y;
-    this.currMoveTime = 0.0;
+    if ((this.moveVectorX != 0) || (this.moveVectorY != 0)) {
+      this.currMoveTime = 0.0;
+    }
   }
 
   this.getMoveVectorRatio = function()
@@ -225,16 +227,33 @@ function AbstractLinearMover(sprite, timeForMove)
 
   this.move = function(frameTime)
   {
-    if (this.currMoveTime < this.timeForMove - frameTime) {
-      this.currMoveTime += frameTime;
-      mvRatio = this.getMoveVectorRatio();
-      this.sprite.x = this.startPosX + this.moveVectorX * mvRatio;
-      this.sprite.y = this.startPosY + this.moveVectorY * mvRatio;
+    if (this.isMoving()) {
+      if (this.currMoveTime < this.timeForMove - frameTime) {
+        this.currMoveTime += frameTime;
+        mvRatio = this.getMoveVectorRatio();
+        this.sprite.x = this.startPosX + this.moveVectorX * mvRatio;
+        this.sprite.y = this.startPosY + this.moveVectorY * mvRatio;
+      }
+      else {
+        this.sprite.x = this.startPosX + this.moveVectorX;
+        this.sprite.y = this.startPosY + this.moveVectorY;
+        this.reset();
+      }
     }
-    else {
-      this.sprite.x = this.startPosX + this.moveVectorX;
-      this.sprite.y = this.startPosY + this.moveVectorY;
-    }
+  }
+
+  this.isMoving = function()
+  {
+    return (this.currMoveTime < this.timeForMove);
+  }
+
+  this.reset = function()
+  {
+    this.startPosX = this.sprite.x;
+    this.startPosY = this.sprite.y;
+    this.moveVectorX = 0;
+    this.moveVectorY = 0;
+    this.currMoveTime = this.timeForMove;  
   }
 
 }
