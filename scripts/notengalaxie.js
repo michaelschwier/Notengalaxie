@@ -16,6 +16,7 @@
       x: options.x,
       y: -600
     })
+    this.passedShip = false;
     this.mover = new ConstantMover(this, 2.5);
     this.mover.setNewTargetPos(this.x, 600);
     this.audio = new Audio("audio/test.mp3");
@@ -29,6 +30,16 @@
     this.gone = function()
     {
       return this.y >= 600;
+    }
+
+    this.setPassedState = function() 
+    {
+      this.passedShip = true;
+    }
+
+    this.hasPassed = function() 
+    {
+      return this.passedShip;
     }
   }
   
@@ -50,6 +61,11 @@
     this.moveTo = function(x, y)
     {
       this.mover.setNewTargetPos(x, y);
+    }
+
+    this.isWaiting = function()
+    {
+      return !this.mover.isMoving();
     }
   }
 
@@ -209,15 +225,39 @@
     this.audio.loop = true;
     this.audio.play();
 
-
-    this.super_update = this.update;
-    this.update = function(frameTime)
+    this.spawnPlanet = function()
     {
       if (!this.scene.planet || this.scene.planet.gone()) {
         var choice = Math.floor(Math.random() * 3);
         var img = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c1";
         this.scene.planet = new Planet({image: img, x: 200 * choice});
       }
+    }
+
+    this.collisionDetection = function()
+    {
+      if(this.scene.planet) {
+        xDistToShip = Math.abs(this.scene.ship.x - this.scene.planet.x);
+        yDistToShip = this.scene.ship.y - this.scene.planet.y;
+        if (!this.scene.planet.hasPassed() && (yDistToShip < 50)) {
+          if (this.scene.ship.isWaiting() && (xDistToShip == 0)) {
+            //catch the planet
+            delete this.scene.planet;
+          }
+          else {
+            //ship missed the planet
+            this.scene.planet.setPassedState();
+          }
+        }
+      }
+    }
+
+    this.super_update = this.update;
+    this.update = function(frameTime)
+    {
+      this.spawnPlanet();
+      this.collisionDetection();
+
       this.super_update(frameTime);
     }
   }
