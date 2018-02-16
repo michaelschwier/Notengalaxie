@@ -65,9 +65,9 @@ function Sprite(options)
   this.update = function(frameTime = 0)
   { }
   
-  this.render = function()
+  this.render = function(renderContext)
   {
-    this.context.drawImage(
+    renderContext.drawImage(
       this.image,
       this.clipX,
       this.clipY,

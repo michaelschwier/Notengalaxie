@@ -8,68 +8,6 @@
 
   
   // --------------------------------------------------------------------------
-  function Planet(options)
-  {
-    Sprite.call(this, {
-      context: canvas.getContext("2d"),
-      image: resources.getImage(options.image),
-      x: options.x,
-      y: -600
-    })
-    this.passedShip = false;
-    this.mover = new ConstantMover(this, 2.5);
-    this.mover.setNewTargetPos(this.x, 600);
-    this.audio = new Audio("audio/test.mp3");
-    //this.audio.play();
-
-    this.update = function(frameTime)
-    {
-      this.mover.move(frameTime);      
-    }
-
-    this.gone = function()
-    {
-      return this.y >= 600;
-    }
-
-    this.setPassedState = function() 
-    {
-      this.passedShip = true;
-    }
-
-    this.hasPassed = function() 
-    {
-      return this.passedShip;
-    }
-  }
-  
-  // --------------------------------------------------------------------------
-  function Ship(options)
-  {
-    Sprite.call(this, {
-      context: canvas.getContext("2d"),
-      image: resources.getImage("ship"),
-      y: 250
-    });
-    this.mover = new SmoothMover(this, 0.5)
-    
-    this.update = function(frameTime = 0) 
-    {
-      this.mover.move(frameTime);
-    }
-
-    this.moveTo = function(x, y)
-    {
-      this.mover.setNewTargetPos(x, y);
-    }
-
-    this.isWaiting = function()
-    {
-      return !this.mover.isMoving();
-    }
-  }
-
-  // --------------------------------------------------------------------------
   function handleMouseMove(e)
   {
     gamePhase.handleMouseMove(e);
@@ -130,16 +68,16 @@
       if (delayUntilGame < 0) 
       {
         var background = new ScrollSprite({
-          context: canvas.getContext("2d"),
           image: resources.getImage("background"),
           height: 600,
           clipHeight: 600,
           loop: true,
           yScrollPerSec: -30
         });
-        var ship = new Ship();
+        var ship = new Ship({
+          image: resources.getImage("ship")
+        });
         var cButton = new Button({
-          context: canvas.getContext("2d"),
           image: resources.getImage("bc"),
           x: 0,
           y: 450,
@@ -149,7 +87,6 @@
           new MoveToCommand(ship, 0, 250)
         );
         var eButton = new Button({
-          context: canvas.getContext("2d"),
           image: resources.getImage("be"),
           x: 200,
           y: 450,
@@ -159,7 +96,6 @@
           new MoveToCommand(ship, 200, 250)
         );
         var gButton = new Button({
-          context: canvas.getContext("2d"),
           image: resources.getImage("bg"),
           x: 400,
           y: 450,
@@ -210,7 +146,7 @@
     this.render = function()
     { 
       for (var key in this.scene) {
-        this.scene[key].render();
+        this.scene[key].render(canvas.getContext("2d"));
       }
     }
 
@@ -234,7 +170,10 @@
       if (!this.scene.planet || this.scene.planet.gone()) {
         var choice = Math.floor(Math.random() * 3);
         var img = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c1";
-        this.scene.planet = new Planet({image: img, x: 200 * choice});
+        this.scene.planet = new Planet({
+          image: resources.getImage(img), 
+          x: 200 * choice
+        });
       }
     }
 
