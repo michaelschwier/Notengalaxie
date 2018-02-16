@@ -20,7 +20,7 @@
     this.mover = new ConstantMover(this, 2.5);
     this.mover.setNewTargetPos(this.x, 600);
     this.audio = new Audio("audio/test.mp3");
-    this.audio.play();
+    //this.audio.play();
 
     this.update = function(frameTime)
     {
@@ -129,9 +129,13 @@
     {
       if (delayUntilGame < 0) 
       {
-        var background = new Sprite({
+        var background = new ScrollSprite({
           context: canvas.getContext("2d"),
-          image: resources.getImage("background"),    
+          image: resources.getImage("background"),
+          height: 600,
+          clipHeight: 600,
+          loop: true,
+          yScrollPerSec: -30
         });
         var ship = new Ship();
         var cButton = new Button({
@@ -223,7 +227,7 @@
     this.audio = new Audio("audio/background.mp3");
     this.audio.volume = 0.6;
     this.audio.loop = true;
-    this.audio.play();
+    //this.audio.play();
 
     this.spawnPlanet = function()
     {
@@ -325,7 +329,7 @@
   // START
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
-  resources.addImage("background", "images/background_600x600x1.png")
+  resources.addImage("background", "images/background_600x1200x1.png")
   resources.addImage("ship", "images/ship_200x169x1.png");
   resources.addImage("bc", "images/c_200x150x2.png");
   resources.addImage("be", "images/e_200x150x2.png");

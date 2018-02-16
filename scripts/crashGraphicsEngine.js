@@ -81,9 +81,79 @@ function Sprite(options)
 }
 
 // --------------------------------------------------------------------------
+function ScrollSprite(options)
+{
+  Sprite.call(this, options);
+
+  this.xScrollPerSec = options.xScrollPerSec || 0;
+  this.yScrollPerSec = options.yScrollPerSec || 0;
+  this.loop = options.loop || false;
+
+  this.update = function(frameTime = 0)
+  {
+    this.updateClip(frameTime);
+    if (this.clipExceedsImage()) {
+      if (this.loop) {
+        this.handleClipOverflow();
+      }
+      else {
+        this.setClipToEnd();
+      }
+    }
+  }
+
+  this.updateClip = function(frameTime)
+  {
+    this.clipX += this.xScrollPerSec * frameTime;
+    this.clipY += this.yScrollPerSec * frameTime;
+  }
+
+  this.clipExceedsImage = function()
+  {
+    if (this.clipX < 0) { return true; }
+    if (this.clipY < 0) { return true; }
+    if (this.clipX + this.clipWidth > this.image.naturalWidth) { return true; }
+    if (this.clipY + this.clipHeight > this.image.naturalHeight) { return true; }
+    return false;
+  }
+
+  this.handleClipOverflow = function()
+  {
+    if (this.xScrollPerSec > 0) {
+      this.clipX -= (this.image.naturalWidth - this.clipWidth);
+    }
+    else if (this.xScrollPerSec < 0) {
+      this.clipX += (this.image.naturalWidth - this.clipWidth);
+    }
+    if (this.yScrollPerSec > 0) {
+      this.clipY -= (this.image.naturalHeight - this.clipHeight);
+    }
+    else if (this.yScrollPerSec < 0) {
+      this.clipY += (this.image.naturalHeight - this.clipHeight);
+    }
+  }
+
+  this.setClipToEnd = function()
+  {
+    if (this.xScrollPerSec > 0) {
+      this.clipX = this.image.naturalWidth - this.clipWidth;
+    }
+    else if (this.xScrollPerSec < 0) {
+      this.clipX = 0;
+    }
+    if (this.yScrollPerSec > 0) {
+      this.clipY = this.image.naturalHeight - this.clipHeight;
+    }
+    else if (this.yScrollPerSec < 0) {
+      this.clipY = 0;
+    }    
+  }
+}
+
+// --------------------------------------------------------------------------
 function SinusAnimationSprite(options)
 {
-  Sprite.call(this, options)
+  Sprite.call(this, options);
 
   var verticalRelPos = 0.0;
   var horizontalRelPos = 0.0;
@@ -110,7 +180,7 @@ function SinusAnimationSprite(options)
 // --------------------------------------------------------------------------
 function MultiFrameSprite(options)
 {
-  Sprite.call(this, options)
+  Sprite.call(this, options);
   this.clipWidth = options.clipWidth || this.image.naturalWidth / options.numberOfFrames;
   this.clipHeight = options.clipHeight || this.image.naturalHeight;
 
