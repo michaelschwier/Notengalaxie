@@ -160,20 +160,28 @@
   function MainGamePhase(scene)
   {
     GamePhase.call(this, scene);
+    this.minSpawnTime = 4.0;
+    this.timeSinceLastSpawn = 0.0;
     this.audio = new Audio("audio/background.mp3");
-    this.audio.volume = 0.6;
+    this.audio.volume = 1.0;
     this.audio.loop = true;
-    //this.audio.play();
+    this.audio.play();
 
     this.spawnPlanet = function()
     {
       if (!this.scene.planet || this.scene.planet.gone()) {
-        var choice = Math.floor(Math.random() * 3);
-        var img = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c1";
-        this.scene.planet = new Planet({
-          image: resources.getImage(img), 
-          x: 200 * choice
-        });
+        if (this.timeSinceLastSpawn > this.minSpawnTime) {
+          var choice = Math.floor(Math.random() * 3);
+          var img = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c1";
+          var note = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c";
+          var audio = new Audio("audio/" + note + ".mp3");
+          this.scene.planet = new Planet({
+            image: resources.getImage(img), 
+            x: 200 * choice,
+            audio: audio
+          });
+          this.timeSinceLastSpawn = 0;
+        }
       }
     }
 
@@ -198,6 +206,7 @@
     this.super_update = this.update;
     this.update = function(frameTime)
     {
+      this.timeSinceLastSpawn += frameTime;
       this.spawnPlanet();
       this.collisionDetection();
 

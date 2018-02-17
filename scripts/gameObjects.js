@@ -4,22 +4,30 @@ function Planet(options)
   Sprite.call(this, {
     image: options.image,
     x: options.x,
-    y: -600
+    y: -800
   })
   this.passedShip = false;
-  this.mover = new ConstantMover(this, 2.5);
+  this.mover = new ConstantMover(this, 3.5);
   this.mover.setNewTargetPos(this.x, 600);
-  this.audio = new Audio("audio/test.mp3");
-  //this.audio.play();
+  this.audio = options.audio;
+  this.audio.play();
 
   this.update = function(frameTime)
   {
-    this.mover.move(frameTime);      
+    this.mover.move(frameTime);
+    var newVolume = this.audio.volume - (frameTime / 2);
+    this.audio.volume = newVolume < 0 ? 0 : newVolume;
   }
 
   this.gone = function()
   {
-    return this.y >= 600;
+    if (this.y >= 600) {
+      this.audio.pause();
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   this.setPassedState = function() 
