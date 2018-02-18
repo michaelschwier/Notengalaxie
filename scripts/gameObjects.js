@@ -44,15 +44,28 @@ function Planet(options)
 // --------------------------------------------------------------------------
 function Ship(options)
 {
-  Sprite.call(this, {
+  MultiFrameAnimatedSprite.call(this, {
     image: options.image,
-    y: 250
+    y: 250,
+    numberOfFrames: 2,
+    updateRate: 0.07
   });
   this.mover = new SmoothMover(this, 0.5)
+  this.blinkTime = 0.7;
+  this.currBlinkTime = this.blinkTime;
   
+  this.ssuper_update = this.update;
   this.update = function(frameTime = 0) 
   {
     this.mover.move(frameTime);
+    if (this.currBlinkTime < this.blinkTime) {
+      this.currBlinkTime += frameTime;
+      if (this.currBlinkTime > this.blinkTime) {
+        this.pause();
+        this.rewind();
+      }
+    }
+    this.ssuper_update(frameTime);
   }
 
   this.moveTo = function(x, y)
@@ -63,6 +76,12 @@ function Ship(options)
   this.isWaiting = function()
   {
     return !this.mover.isMoving();
+  }
+
+  this.blink = function()
+  {
+    this.playLoop();
+    this.currBlinkTime = 0.0;
   }
 }
 
