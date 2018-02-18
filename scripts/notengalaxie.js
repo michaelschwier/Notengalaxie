@@ -80,33 +80,34 @@
         var cButton = new Button({
           image: resources.getImage("bc"),
           x: 0,
-          y: 450,
+          y: 440,
           width: 195,
-          height: 150
+          height: 160
           }, 
           new MoveToCommand(ship, 0, 250)
         );
         var eButton = new Button({
           image: resources.getImage("be"),
           x: 200,
-          y: 450,
+          y: 440,
           width: 195,
-          height: 150
+          height: 160
           }, 
           new MoveToCommand(ship, 200, 250)
         );
         var gButton = new Button({
           image: resources.getImage("bg"),
           x: 400,
-          y: 450,
+          y: 440,
           width: 195,
-          height: 150
+          height: 160
           }, 
           new MoveToCommand(ship, 400, 250)
         );
         
         return new MainGamePhase({
           background: background,
+          planet: null,
           ship: ship,
           cButton: cButton,
           eButton: eButton,
@@ -129,9 +130,11 @@
 
     this.handleMouseDown = function(e)
     { 
-      for (var key in this.scene) {
-        if ("handleMouseDown" in this.scene[key]) {
-          this.scene[key].handleMouseDown(e);
+      for (var key in this.scene) {        
+        if (this.scene[key]) {
+          if ("handleMouseDown" in this.scene[key]) {
+            this.scene[key].handleMouseDown(e);
+          }
         }
       }
     }
@@ -139,14 +142,18 @@
     this.update = function(frameTime = 0)
     { 
       for (var key in this.scene) {
-        this.scene[key].update(frameTime);
+        if (this.scene[key]) {
+          this.scene[key].update(frameTime);
+        }
       }
     }
 
     this.render = function()
     { 
       for (var key in this.scene) {
-        this.scene[key].render(canvas.getContext("2d"));
+        if (this.scene[key]) {
+          this.scene[key].render(canvas.getContext("2d"));
+        }
       }
     }
 
@@ -193,7 +200,8 @@
         if (!this.scene.planet.hasPassed() && (yDistToShip < 50)) {
           if (this.scene.ship.isWaiting() && (xDistToShip == 0)) {
             //catch the planet
-            delete this.scene.planet;
+            this.scene.planet = null;
+            this.scene.ship.blink();
           }
           else {
             //ship missed the planet
@@ -278,10 +286,10 @@
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
   resources.addImage("background", "images/background_600x1200x1.png")
-  resources.addImage("ship", "images/ship_200x169x1.png");
-  resources.addImage("bc", "images/c_200x150x2.png");
-  resources.addImage("be", "images/e_200x150x2.png");
-  resources.addImage("bg", "images/g_200x150x2.png");
+  resources.addImage("ship", "images/ship_200x169x2.png");
+  resources.addImage("bc", "images/c_200x160x2.png");
+  resources.addImage("be", "images/e_200x160x2.png");
+  resources.addImage("bg", "images/g_200x160x2.png");
   resources.addImage("c1", "images/planet-c1_200x200x1.png");
   resources.addImage("e", "images/planet-e_200x200x1.png");
   resources.addImage("g", "images/planet-g_200x200x1.png");
