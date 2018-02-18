@@ -181,8 +181,8 @@ function SinusAnimationSprite(options)
 function MultiFrameSprite(options)
 {
   Sprite.call(this, options);
+  this.width = options.width || this.image.naturalWidth / options.numberOfFrames;
   this.clipWidth = options.clipWidth || this.image.naturalWidth / options.numberOfFrames;
-  this.clipHeight = options.clipHeight || this.image.naturalHeight;
 
   this.frameIndex = 0;
   this.numberOfFrames = options.numberOfFrames || 1;
@@ -226,40 +226,48 @@ function MultiFrameAnimatedSprite(options)
 
   this.isPlaying = false;
   this.autoRepeat = false;
-  this.updateRate = options.updateRate || 1;
-  this.currTickCount = 0;
+  this.updateRate = options.updateRate || 0.04;
+  this.currFrameTime = 0;
 
   this.play = function() 
   {
+    this.currFrameTime = 0;
     this.isPlaying = true;
   }
 
   this.playLoop = function() 
   {
-    this.isPlaying = true;
     this.autoRepeat = true;
+    this.play();
   }
 
-  this.stop = function()
+  this.pause = function()
   {
     this.isPlaying = false;
     this.autoRepeat = false;
   }
 
+  this.rewind = function()
+  {
+    this.frameIndex = 0;
+  }
+
   this.super_update = this.update;
   this.update = function(frameTime = 0)
   {
-    this.currTickCount += 1;
-    if (this.currTickCount >= this.updateRate) {
-      this.currTickCount = 0;
-      if (this.frameIndex < this.numberOfFrames - 1) {
-        this.increaseCurrentFrameIdxBy(1);
-      }
-      else if (this.autoRepeat) {
-        this.frameIndex = 0;
-      }
-      else {
-        this.stop();
+    if (this.isPlaying) {
+      this.currFrameTime += frameTime;
+      if (this.currFrameTime >= this.updateRate) {
+        this.currFrameTime = 0;
+        if (this.frameIndex < this.numberOfFrames - 1) {
+          this.increaseCurrentFrameIdxBy(1);
+        }
+        else if (this.autoRepeat) {
+          this.frameIndex = 0;
+        }
+        else {
+          this.pause();
+        }
       }
     }
     this.super_update();
