@@ -4,6 +4,7 @@
   var resources;
   var canvas;
   var gamePhase;
+  var levelCreator;
   var playerScore = 0;
 
   
@@ -55,52 +56,10 @@
     {
       if (delayUntilGame < 0) 
       {
-        var background = new ScrollSprite({
-          image: resources.getImage("background"),
-          height: 600,
-          clipHeight: 600,
-          loop: true,
-          yScrollPerSec: -30
-        });
-        var ship = new Ship({
-          image: resources.getImage("ship")
-        });
-        var cButton = new Button({
-          image: resources.getImage("bc"),
-          x: 0,
-          y: 440,
-          width: 195,
-          height: 160
-          }, 
-          new MoveToCommand(ship, 0, 250)
-        );
-        var eButton = new Button({
-          image: resources.getImage("be"),
-          x: 200,
-          y: 440,
-          width: 195,
-          height: 160
-          }, 
-          new MoveToCommand(ship, 200, 250)
-        );
-        var gButton = new Button({
-          image: resources.getImage("bg"),
-          x: 400,
-          y: 440,
-          width: 195,
-          height: 160
-          }, 
-          new MoveToCommand(ship, 400, 250)
-        );
         
-        return new MainGamePhase({
-          background: background,
-          planet: null,
-          ship: ship,
-          cButton: cButton,
-          eButton: eButton,
-          gButton: gButton
-        });
+        return new MainGamePhase(
+          levelCreator.getScene(0)
+        );
       }
       else {
         return this;
@@ -118,7 +77,7 @@
 
     this.handleMouseDown = function(e)
     { 
-      for (var key in this.scene) {        
+      for (var key in this.scene) {
         if (this.scene[key]) {
           if ("handleMouseDown" in this.scene[key]) {
             this.scene[key].handleMouseDown(e);
@@ -265,6 +224,8 @@
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("touchstart", handleMouseDown);
     canvas.addEventListener("mousedown", handleMouseDown);
+
+    levelCreator = new LevelCreator(levelDefinitions, resources)
   
     gameLoop();
   }
