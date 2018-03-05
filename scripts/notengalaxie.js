@@ -26,18 +26,6 @@
   }
   
   // --------------------------------------------------------------------------
-  function MoveToCommand(receiver, x, y) {
-    this.receiver = receiver;
-    this.x = x;
-    this.y = y;
-
-    this.execute = function()
-    {
-      this.receiver.moveTo(x, y);
-    }
-  }
-  
-  // --------------------------------------------------------------------------
   function IntroPhase(titleDelay = 10) {
     var delayUntilTitle = titleDelay;
     var delayUntilGame = 10 + delayUntilTitle;
