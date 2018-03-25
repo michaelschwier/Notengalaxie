@@ -60,7 +60,6 @@ function Sprite(options)
   this.clipY = options.clipY || 0;
   this.clipWidth = options.clipWidth || this.image.naturalWidth;
   this.clipHeight = options.clipHeight || this.image.naturalHeight;
-  this.context = options.context;
 
   this.update = function(frameTime = 0)
   { }
@@ -368,7 +367,6 @@ function SmoothMover(sprite, timeForMove)
 function Button(options, command)
 {
   MultiFrameSprite.call(this, {
-    context: options.context,
     x: options.x,
     y: options.y,
     width: options.width,
