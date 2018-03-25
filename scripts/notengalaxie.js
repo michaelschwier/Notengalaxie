@@ -30,7 +30,6 @@
   function IntroPhase(titleDelay = 10) {
     var delayUntilTitle = titleDelay;
     var delayUntilGame = 10 + delayUntilTitle;
-    playerScore = 0;
 
     this.handleMouseMove = function(e)
     { }
@@ -56,10 +55,7 @@
     {
       if (delayUntilGame < 0) 
       {
-        
-        return new MainGamePhase(
-          levelCreator.getScene(0)
-        );
+        return new MainGamePhase(0);
       }
       else {
         return this;
@@ -90,7 +86,9 @@
     { 
       for (var key in this.scene) {
         if (this.scene[key]) {
-          this.scene[key].update(frameTime);
+          if ("update" in this.scene[key]) {
+            this.scene[key].update(frameTime);
+          }
         }
       }
     }
@@ -99,7 +97,9 @@
     { 
       for (var key in this.scene) {
         if (this.scene[key]) {
-          this.scene[key].render(canvas.getContext("2d"));
+          if ("render" in this.scene[key]) {
+            this.scene[key].render(canvas.getContext("2d"));
+          }
         }
       }
     }
@@ -111,33 +111,15 @@
   }
   
   // --------------------------------------------------------------------------
-  function MainGamePhase(scene)
+  function MainGamePhase(level)
   {
-    GamePhase.call(this, scene);
-    this.minSpawnTime = 4.0;
-    this.timeSinceLastSpawn = 0.0;
+    this.level = level;
+    GamePhase.call(this, levelCreator.getScene(this.level));
+    playerScore = 0;
     this.audio = new Audio("audio/background.mp3");
     this.audio.volume = 1.0;
     this.audio.loop = true;
     this.audio.play();
-
-    this.spawnPlanet = function()
-    {
-      if (!this.scene.planet || this.scene.planet.gone()) {
-        if (this.timeSinceLastSpawn > this.minSpawnTime) {
-          var choice = Math.floor(Math.random() * 3);
-          var img = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c1";
-          var note = (choice != 0) ? ((choice == 1) ? "e" : "g") : "c";
-          var audio = new Audio("audio/" + note + ".mp3");
-          this.scene.planet = new Planet({
-            image: resources.getImage(img), 
-            x: 200 * choice,
-            audio: audio
-          });
-          this.timeSinceLastSpawn = 0;
-        }
-      }
-    }
 
     this.collisionDetection = function()
     {
@@ -149,24 +131,42 @@
             //catch the planet
             this.scene.planet = null;
             this.scene.ship.blink();
+            this.updatePlayerScore(1);
           }
           else {
             //ship missed the planet
             this.scene.planet.setPassedState();
+            this.updatePlayerScore(-1);
           }
         }
       }
     }
 
+    this.updatePlayerScore = function(increment) 
+    {
+      playerScore += increment;
+      playerScore = playerScore < 0 ? 0 : playerScore;
+      console.log(playerScore);
+    }
+
     this.super_update = this.update;
     this.update = function(frameTime)
     {
-      this.timeSinceLastSpawn += frameTime;
-      this.spawnPlanet();
       this.collisionDetection();
 
       this.super_update(frameTime);
     }
+
+    this.getNextGamePhase = function()
+    { 
+      if (playerScore < 4) {
+        return this;
+      }
+      else {
+        return new MainGamePhase(this.level + 1);
+      }
+    }
+
   }
 
     
@@ -235,10 +235,11 @@
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
   resources.addImage("background", "images/background_600x1200x1.png")
+  resources.addImage("notensystem", "images/notensystem_600x160x2.png")
   resources.addImage("ship", "images/ship_200x169x2.png");
-  resources.addImage("bc", "images/c_200x160x2.png");
-  resources.addImage("be", "images/e_200x160x2.png");
-  resources.addImage("bg", "images/g_200x160x2.png");
+  resources.addImage("bc1", "images/c1_45x45x2.png");
+  resources.addImage("be", "images/e_45x45x2.png");
+  resources.addImage("bg", "images/g_45x45x2.png");
   resources.addImage("c1", "images/planet-c1_200x200x1.png");
   resources.addImage("e", "images/planet-e_200x200x1.png");
   resources.addImage("g", "images/planet-g_200x200x1.png");

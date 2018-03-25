@@ -46,6 +46,7 @@ function Ship(options)
 {
   MultiFrameAnimatedSprite.call(this, {
     image: options.image,
+    x: options.x,
     y: 250,
     numberOfFrames: 2,
     updateRate: 0.07
@@ -85,3 +86,33 @@ function Ship(options)
   }
 }
 
+// --------------------------------------------------------------------------
+function NavigationButton(options, command)
+{
+  Button.call(this, options, command);
+  this.relClipX = options.x;
+  this.offsetX = this.clipWidth;
+  this.clipWidth = options.width;
+
+  this.overlay = new MultiFrameSprite({
+    image: options.overlayImage,
+    x: options.overlayX,
+    y: options.overlayY,
+    numberOfFrames: 2
+  });
+
+  this.super_update = function(frameTime)
+  {
+    this.clipX = this.frameIndex * this.offsetX + this.relClipX;
+    this.overlay.setCurrentFrameIdx(this.frameIndex);
+    this.overlay.update(frameTime);
+  }
+
+  this.super_render = this.render;
+  this.render = function(renderContext)
+  {
+    this.super_render(renderContext);
+    this.overlay.render(renderContext);
+  }
+
+}
