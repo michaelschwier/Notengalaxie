@@ -230,7 +230,7 @@
   // START
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
-  resources.addImage("background", "images/background_600x1200x1.png")
+  resources.addImage("background", "images/background_600x600x1.png")
   resources.addImage("notensystem", "images/notensystem_600x160x2.png")
   resources.addImage("ship", "images/ship_200x169x2.png");
   resources.addImage("bc1", "images/c1_45x45x2.png");

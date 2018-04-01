@@ -14,17 +14,13 @@ function LevelCreator(levelDefinitions, resources)
 
   this.addDefaultObjectsToScene = function(scene, levelIdx)
   {
-    scene.background = new ScrollSprite({
     scene.backgroundAudio = new AudioCrossfadeLooper({
       audioFileName: "audio/background.mp3",
       fadeStart: 8.5,
       fadeDuration: 0.5
     });
+    scene.background = new Sprite({
       image: this.resources.getImage("background"),
-      height: 600,
-      clipHeight: 600,
-      loop: true,
-      yScrollPerSec: -30
     });
     scene.planet = null;
     scene.ship = new Ship({
