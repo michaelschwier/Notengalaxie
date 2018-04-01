@@ -15,8 +15,6 @@ function Planet(options)
   this.update = function(frameTime)
   {
     this.mover.move(frameTime);
-    var newVolume = this.audio.volume - (frameTime / 2);
-    this.audio.volume = newVolume < 0 ? 0 : newVolume;
   }
 
   this.gone = function()
