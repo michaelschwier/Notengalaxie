@@ -112,5 +112,65 @@ function NavigationButton(options, command)
     this.super_render(renderContext);
     this.overlay.render(renderContext);
   }
-
 }
+
+// --------------------------------------------------------------------------
+function ScoreBar(options)
+{
+  this.currScore = options.initScore || 3;
+  this.maxScore = 10;
+  this.looseScore = 0;
+  this.scorePointSprites = [];
+  for (i = 0; i < this.maxScore; i++) {
+    this.scorePointSprites[i] = new MultiFrameAnimatedSprite({
+      image: options.image,
+      y: 378 - (i * 42),
+      numberOfFrames: 2
+    });
+  }
+
+  this.updateScore = function(increment) 
+  {
+    this.currScore += increment;
+    this.currScore = this.currScore < this.looseScore ? this.looseScore : this.currScore;
+    this.currScore = this.currScore > this.maxScore ? this.maxScore : this.currScore;
+  }
+
+  this.getScore = function()
+  {
+    return this.currScore;
+  }
+
+  this.isMax = function()
+  {
+    return this.currScore == this.maxScore;
+  }
+
+  this.isEmpty = function()
+  {
+    return this.currScore == this.looseScore;
+  }
+
+  this.update = function(framTime)
+  {
+    for (i = 0; i < this.maxScore; i++) {
+      if (i < this.currScore) {
+        this.scorePointSprites[i].setCurrentFrameIdx(1);
+      }
+      else {
+        this.scorePointSprites[i].setCurrentFrameIdx(0);
+      }
+      this.scorePointSprites[i].update(framTime);
+    }
+  }
+
+  this.render = function(renderContext)
+  {
+    for (i = 0; i < this.maxScore; i++) {
+      this.scorePointSprites[i].render(renderContext);
+    }
+  }
+}
+
+
+

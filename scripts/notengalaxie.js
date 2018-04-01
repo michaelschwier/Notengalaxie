@@ -5,7 +5,6 @@
   var canvas;
   var gamePhase;
   var levelCreator;
-  var playerScore = 0;
 
   
   // --------------------------------------------------------------------------
@@ -115,7 +114,6 @@
   {
     this.level = level;
     GamePhase.call(this, levelCreator.getScene(this.level));
-    playerScore = 0;
 
     this.collisionDetection = function()
     {
@@ -127,22 +125,15 @@
             //catch the planet
             this.scene.planet = null;
             this.scene.ship.blink();
-            this.updatePlayerScore(1);
+            this.scene.scoreBar.updateScore(1);
           }
           else {
             //ship missed the planet
             this.scene.planet.setPassedState();
-            this.updatePlayerScore(-1);
+            this.scene.scoreBar.updateScore(-1);
           }
         }
       }
-    }
-
-    this.updatePlayerScore = function(increment) 
-    {
-      playerScore += increment;
-      playerScore = playerScore < 0 ? 0 : playerScore;
-      console.log(playerScore);
     }
 
     this.super_update = this.update;
@@ -155,11 +146,15 @@
 
     this.getNextGamePhase = function()
     { 
-      if (playerScore < 4) {
-        return this;
+      if (this.scene.scoreBar.isMax()) {
+        return new MainGamePhase(this.level + 1);
+      }
+      else if (this.scene.scoreBar.isEmpty()) {
+        newLevel = this.level - 1 < 0 ? 0 : this.level - 1
+        return new MainGamePhase(newLevel);
       }
       else {
-        return new MainGamePhase(this.level + 1);
+        return this;
       }
     }
 
@@ -231,6 +226,7 @@
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
   resources.addImage("background", "images/background_600x600x1.png")
+  resources.addImage("hamster", "images/hamster_60x60x2.png")  
   resources.addImage("notensystem", "images/notensystem_600x160x2.png")
   resources.addImage("ship", "images/ship_200x169x2.png");
   resources.addImage("bc1", "images/c1_45x45x2.png");

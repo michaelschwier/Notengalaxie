@@ -22,6 +22,9 @@ function LevelCreator(levelDefinitions, resources)
     scene.background = new Sprite({
       image: this.resources.getImage("background"),
     });
+    scene.scoreBar = new ScoreBar({
+      image: this.resources.getImage("hamster")
+    });
     scene.planet = null;
     scene.ship = new Ship({
       image: this.resources.getImage("ship"),
