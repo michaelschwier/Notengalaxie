@@ -116,10 +116,6 @@
     this.level = level;
     GamePhase.call(this, levelCreator.getScene(this.level));
     playerScore = 0;
-    this.audio = new Audio("audio/background.mp3");
-    this.audio.volume = 1.0;
-    this.audio.loop = true;
-    this.audio.play();
 
     this.collisionDetection = function()
     {
