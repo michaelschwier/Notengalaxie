@@ -18,17 +18,17 @@
     var clientRect = canvas.getBoundingClientRect();
     x = e.clientX - clientRect.left;
     y = e.clientY - clientRect.top;
-    x *= 600 / canvas.width;
-    y *= 600 / canvas.height;
+    x *= 600 / clientRect.width;
+    y *= 600 / clientRect.height;
     e.canvasX = x;
     e.canvasY = y;
     gamePhase.handleMouseDown(e);
   }
   
   // --------------------------------------------------------------------------
-  function IntroPhase(titleDelay = 10) {
+  function IntroPhase(titleDelay = 40) {
     var delayUntilTitle = titleDelay;
-    var delayUntilGame = 10 + delayUntilTitle;
+    var delayUntilGame = 40 + delayUntilTitle;
 
     this.handleMouseMove = function(e)
     { }
@@ -46,7 +46,7 @@
       }
       if (delayUntilGame == 0) {
         document.getElementById("gameContainer").style.backgroundImage="none"; 
-        document.getElementById("gameContainer").style.background="white";
+        document.getElementById("gameContainer").style.background="black";
       }
     }
 
@@ -159,26 +159,7 @@
     }
 
   }
-
     
-  // --------------------------------------------------------------------------
-  function adjustCanvasSize()
-  {
-    var gameContainer = document.getElementById("gameContainer");
-    var newSize = Math.min(gameContainer.offsetWidth, gameContainer.offsetHeight);
-    var currSize = Math.min(canvas.width, canvas.height);
-
-    if (newSize != currSize) {
-      //console.log(gameContainer.offsetWidth, gameContainer.offsetHeight, canvas.width, canvas.height);
-      canvas.width = newSize;
-      canvas.height = newSize;
-      newRelSize = newSize / 600.0;
-      canvas.getContext("2d").setTransform(newRelSize, 0, 0, newRelSize, 0, 0);
-      //console.log(gameContainer.offsetWidth, gameContainer.offsetHeight, canvas.width, canvas.height);
-      //console.log("-------------------")
-      }
-  }
-  
   // --------------------------------------------------------------------------
   function getPassedFrameTimeInSeconds(timeStamp)
   {
@@ -196,7 +177,6 @@
     var timePassed = getPassedFrameTimeInSeconds(timeStamp);
 
     window.requestAnimationFrame(gameLoop);
-    adjustCanvasSize();
     canvas.getContext("2d").clearRect(0, 0, 600, 600);
 
     gamePhase.update(timePassed);
@@ -208,7 +188,9 @@
   function initGame()
   {
     canvas = document.getElementById("gameCanvas");
-    adjustCanvasSize();
+    canvas.width = 600;
+    canvas.height = 600;
+
     gamePhase = new IntroPhase();
 
     canvas.addEventListener("touchmove", handleMouseMove);

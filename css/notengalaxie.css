@@ -1,6 +1,11 @@
+body {
+	margin: 0;
+	background-color: black;
+}
+
 #gameContainer {
 	position: relative;
-	background-color: white;
+	background-color: black;
 	background-image: url("../images/title-01.png");
 	background-size: cover;
 	max-width: 600px;
