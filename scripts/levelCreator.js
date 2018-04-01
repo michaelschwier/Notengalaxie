@@ -15,6 +15,11 @@ function LevelCreator(levelDefinitions, resources)
   this.addDefaultObjectsToScene = function(scene, levelIdx)
   {
     scene.background = new ScrollSprite({
+    scene.backgroundAudio = new AudioCrossfadeLooper({
+      audioFileName: "audio/background.mp3",
+      fadeStart: 8.5,
+      fadeDuration: 0.5
+    });
       image: this.resources.getImage("background"),
       height: 600,
       clipHeight: 600,
