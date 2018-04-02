@@ -1,2 +1,2 @@
 # Notengalaxie
-Another mini Webgame
+(c) 2017-2018 All rights reserved
