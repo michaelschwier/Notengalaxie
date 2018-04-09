@@ -1,3 +1,6 @@
+html {
+}
+
 body {
 	margin: 0;
 	background-color: black;
@@ -7,9 +10,9 @@ body {
 	position: relative;
 	background-color: black;
 	background-image: url("../images/title-01.png");
-	background-size: cover;
-	max-width: 600px;
-	max-height: 600px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	max-width: 700px;
 	margin: 0 auto;
 	padding: 0px;
 	-webkit-user-select: none;  
