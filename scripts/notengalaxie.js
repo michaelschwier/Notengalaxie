@@ -18,8 +18,8 @@
     var clientRect = canvas.getBoundingClientRect();
     x = e.clientX - clientRect.left;
     y = e.clientY - clientRect.top;
-    x *= 600 / clientRect.width;
-    y *= 600 / clientRect.height;
+    x *= canvas.width / clientRect.width;
+    y *= canvas.height / clientRect.height;
     e.canvasX = x;
     e.canvasY = y;
     gamePhase.handleMouseDown(e);
@@ -120,6 +120,7 @@
       if(this.scene.planet) {
         xDistToShip = Math.abs(this.scene.ship.x - this.scene.planet.x);
         yDistToShip = this.scene.ship.y - this.scene.planet.y;
+        console.log(this.scene.ship.x, this.scene.planet.x)
         if (!this.scene.planet.hasPassed() && (yDistToShip < 50)) {
           if (this.scene.ship.isWaiting() && (xDistToShip == 0)) {
             //catch the planet
@@ -177,7 +178,7 @@
     var timePassed = getPassedFrameTimeInSeconds(timeStamp);
 
     window.requestAnimationFrame(gameLoop);
-    canvas.getContext("2d").clearRect(0, 0, 600, 600);
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
 
     gamePhase.update(timePassed);
     gamePhase.render();
@@ -188,8 +189,8 @@
   function initGame()
   {
     canvas = document.getElementById("gameCanvas");
-    canvas.width = 600;
-    canvas.height = 600;
+    canvas.width = 800;
+    canvas.height = 1000;
 
     gamePhase = new IntroPhase();
 
@@ -207,9 +208,9 @@
   // START
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
-  resources.addImage("background", "images/background_600x600x1.png")
-  resources.addImage("hamster", "images/hamster_60x60x2.png")  
-  resources.addImage("notensystem", "images/notensystem_600x160x2.png")
+  resources.addImage("background", "images/background_800x1067x1.png")
+  resources.addImage("hamster", "images/hamster_100x74x2.png")  
+  resources.addImage("button", "images/button_200x149x2.png")
   resources.addImage("ship", "images/ship_200x169x2.png");
   resources.addImage("bc1", "images/c1_45x45x2.png");
   resources.addImage("be", "images/e_45x45x2.png");

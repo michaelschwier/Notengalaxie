@@ -6,9 +6,10 @@ function Planet(options)
     x: options.x,
     y: -800
   })
+  this.maxX = 1000;
   this.passedShip = false;
   this.mover = new ConstantMover(this, 3.5);
-  this.mover.setNewTargetPos(this.x, 600);
+  this.mover.setNewTargetPos(this.x, this.maxX);
   this.audio = options.audio;
   this.audio.play();
 
@@ -19,7 +20,7 @@ function Planet(options)
 
   this.gone = function()
   {
-    if (this.y >= 600) {
+    if (this.y >= this.maxX) {
       this.audio.pause();
       return true;
     }
@@ -45,7 +46,7 @@ function Ship(options)
   MultiFrameAnimatedSprite.call(this, {
     image: options.image,
     x: options.x,
-    y: 250,
+    y: 650,
     numberOfFrames: 2,
     updateRate: 0.07
   });
@@ -88,7 +89,6 @@ function Ship(options)
 function NavigationButton(options, command)
 {
   Button.call(this, options, command);
-  this.relClipX = options.x;
   this.offsetX = this.clipWidth;
   this.clipWidth = options.width;
 
@@ -99,11 +99,12 @@ function NavigationButton(options, command)
     numberOfFrames: 2
   });
 
-  this.super_update = function(frameTime)
+  this.super_update2 = this.update
+  this.update = function(frameTime)
   {
-    this.clipX = this.frameIndex * this.offsetX + this.relClipX;
     this.overlay.setCurrentFrameIdx(this.frameIndex);
     this.overlay.update(frameTime);
+    this.super_update2(frameTime);
   }
 
   this.super_render = this.render;
@@ -124,7 +125,10 @@ function ScoreBar(options)
   for (i = 0; i < this.maxScore; i++) {
     this.scorePointSprites[i] = new MultiFrameAnimatedSprite({
       image: options.image,
-      y: 378 - (i * 42),
+      x: 20 + i * 78,
+      y: 20,
+      width: 70,
+      height: 52,
       numberOfFrames: 2
     });
   }

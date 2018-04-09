@@ -22,13 +22,13 @@ function LevelCreator(levelDefinitions, resources)
     scene.background = new Sprite({
       image: this.resources.getImage("background"),
     });
+    scene.planet = null;
     scene.scoreBar = new ScoreBar({
       image: this.resources.getImage("hamster")
     });
-    scene.planet = null;
     scene.ship = new Ship({
       image: this.resources.getImage("ship"),
-      x: this.getObjectOffsetX(levelIdx)
+      x: this.getObjectPositionX(levelIdx, 0)
     });
   }
 
@@ -39,19 +39,19 @@ function LevelCreator(levelDefinitions, resources)
     for (var i = 0; i < noButtons; i++) {
       buttonKey = "button" + i;
       overlayImageKey = "b" + levelDef.planets[i].imageKey
-      buttonWidth = this.getButtonWidth(levelIdx);
-      buttonX = 2 + i * buttonWidth;
+      buttonWidth = 200;
+      buttonX = this.getObjectPositionX(levelIdx, i);
       scene[buttonKey] = new NavigationButton({
-        image: this.resources.getImage("notensystem"),
+        image: this.resources.getImage("button"),
         overlayImage: this.resources.getImage(overlayImageKey),
-        overlayX: buttonX + this.getButtonOverlayOffsetX(buttonWidth, i),
-        overlayY: 440 + this.getButtonOverlayOffsetY(overlayImageKey),
+        overlayX: buttonX + 90,
+        overlayY: 840 + this.getButtonOverlayOffsetY(overlayImageKey),
         x: buttonX,
-        y: 440,
-        width: buttonWidth -4,
-        height: 160
+        y: 840,
+        width: buttonWidth,
+        height: 149
         }, 
-        new MoveToCommand(scene.ship, this.getObjectPositionX(levelIdx, i), 250)
+        new MoveToCommand(scene.ship, this.getObjectPositionX(levelIdx, i), 650)
       );
     }
   }
@@ -73,45 +73,26 @@ function LevelCreator(levelDefinitions, resources)
 
   this.getObjectPositionX = function(levelIdx, planetIdx)
   {
-    return planetIdx * this.getButtonWidth(levelIdx) + this.getObjectOffsetX(levelIdx)
-  }
-
-  this.getObjectOffsetX = function(levelIdx)
-  {
-    return (this.getButtonWidth(levelIdx) - 200) / 2;
-  }
-
-  this.getButtonWidth = function(levelIdx)
-  {
     levelDef = this.levelDefinitions[levelIdx];
-    noButtons = levelDef.planets.length;
-    return 600 / noButtons;
+    noPlanets = levelDef.planets.length;
+    offset = Math.floor((800 - noPlanets * 200) / (noPlanets + 1));
+    return offset + planetIdx * (offset + 200);
   }
 
   this.getButtonOverlayOffsetY = function(overlayImageKey)
   {
     switch(overlayImageKey) {
       case "bc1":
-        return 105;
+        return 95;
         break;
       case "be":
-        return 85;
+        return 78;
         break;
       case "bg":
-        return 63;
+        return 59;
         break;
       default:
         return 0;
-    }
-  }
-
-  this.getButtonOverlayOffsetX = function(buttonWidth, posIdx)
-  {
-    if (posIdx > 0) {
-      return ((buttonWidth - 4) / 2) - 23;
-    }
-    else {
-      return 60 + ((buttonWidth - (60 + 4)) / 2) - 23;
     }
   }
 
