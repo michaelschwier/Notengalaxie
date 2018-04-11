@@ -85,11 +85,26 @@ function LevelCreator(levelDefinitions, resources)
       case "bc1":
         return 95;
         break;
+      case "bd":
+        return 86;
+        break;
       case "be":
         return 78;
         break;
+      case "bf":
+        return 67;
+        break;
       case "bg":
         return 59;
+        break;
+      case "ba":
+        return 50;
+        break;
+      case "bh":
+        return 43;
+        break;
+      case "bc2":
+        return 34;
         break;
       default:
         return 0;
