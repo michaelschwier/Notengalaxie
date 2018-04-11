@@ -54,7 +54,7 @@
     {
       if (delayUntilGame < 0) 
       {
-        return new MainGamePhase(0);
+        return new MainGamePhase(6);
       }
       else {
         return this;
@@ -120,7 +120,6 @@
       if(this.scene.planet) {
         xDistToShip = Math.abs(this.scene.ship.x - this.scene.planet.x);
         yDistToShip = this.scene.ship.y - this.scene.planet.y;
-        console.log(this.scene.ship.x, this.scene.planet.x)
         if (!this.scene.planet.hasPassed() && (yDistToShip < 50)) {
           if (this.scene.ship.isWaiting() && (xDistToShip == 0)) {
             //catch the planet
@@ -208,16 +207,26 @@
   // START
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
-  resources.addImage("background", "images/background_800x1067x1.png")
+  resources.addImage("background", "images/background_800x1000x1.png")
   resources.addImage("hamster", "images/hamster_100x74x2.png")  
   resources.addImage("button", "images/button_200x149x2.png")
   resources.addImage("ship", "images/ship_200x169x2.png");
   resources.addImage("bc1", "images/c1_45x45x2.png");
+  resources.addImage("bd", "images/d_45x45x2.png");
   resources.addImage("be", "images/e_45x45x2.png");
+  resources.addImage("bf", "images/f_45x45x2.png");
   resources.addImage("bg", "images/g_45x45x2.png");
+  resources.addImage("ba", "images/a_45x45x2.png");
+  resources.addImage("bh", "images/h_45x45x2.png");
+  resources.addImage("bc2", "images/c2_45x45x2.png");
   resources.addImage("c1", "images/planet-c1_200x200x1.png");
+  resources.addImage("d", "images/planet-d_200x200x1.png");
   resources.addImage("e", "images/planet-e_200x200x1.png");
+  resources.addImage("f", "images/planet-f_200x200x1.png");
   resources.addImage("g", "images/planet-g_200x200x1.png");
+  resources.addImage("a", "images/planet-a_200x200x1.png");
+  resources.addImage("h", "images/planet-h_200x200x1.png");
+  resources.addImage("c2", "images/planet-c2_200x200x1.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
