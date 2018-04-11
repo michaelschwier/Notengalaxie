@@ -12,7 +12,8 @@ body {
 	background-image: url("../images/title-01.png");
 	background-size: contain;
 	background-repeat: no-repeat;
-	max-width: 700px;
+	height:99vh;
+	width:80vh;
 	margin: 0 auto;
 	padding: 0px;
 	-webkit-user-select: none;  
