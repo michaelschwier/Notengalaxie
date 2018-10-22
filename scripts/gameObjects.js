@@ -4,11 +4,11 @@ function Planet(options)
   Sprite.call(this, {
     image: options.image,
     x: options.x,
-    y: -800
+    y: -400
   })
   this.maxX = 1000;
   this.passedShip = false;
-  this.mover = new ConstantMover(this, 3.5);
+  this.mover = new ConstantMover(this, 6.0);
   this.mover.setNewTargetPos(this.x, this.maxX);
   this.audio = options.audio;
   this.audio.play();

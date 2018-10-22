@@ -1,7 +1,7 @@
 levelDefinitions = [
   {
     name: "Oktave",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "c1",
@@ -15,7 +15,7 @@ levelDefinitions = [
   },
   {
     name: "Quinte",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "c1",
@@ -29,7 +29,7 @@ levelDefinitions = [
   },
   {
     name: "Große Terz C",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "c1",
@@ -43,7 +43,7 @@ levelDefinitions = [
   },
   {
     name: "Kleine Terz E",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "e",
@@ -57,7 +57,7 @@ levelDefinitions = [
   },
   {
     name: "Dreikklang C",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "c1",
@@ -75,7 +75,7 @@ levelDefinitions = [
   },
   {
     name: "Dreikklang E",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "e",
@@ -93,7 +93,7 @@ levelDefinitions = [
   },
   {
     name: "Dreikklang D",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "d",
@@ -111,7 +111,7 @@ levelDefinitions = [
   },
   {
     name: "Dreiklang C Invertiert",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "g",
@@ -129,7 +129,7 @@ levelDefinitions = [
   },
   {
     name: "Vierklang C",
-    minSpawnTime: 5.0,
+    minSpawnTime: 6.0,
     planets: [
       {
         imageKey: "c1",
