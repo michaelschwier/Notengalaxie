@@ -5,6 +5,9 @@ function LevelCreator(levelDefinitions, resources)
 
   this.getScene = function(levelIdx)
   {
+    if (levelIdx >= this.levelDefinitions.length) {
+      levelIdx = 0
+    }
     var scene = {};
     this.addDefaultObjectsToScene(scene, levelIdx);
     this.addButtonsToScene(scene, levelIdx);
@@ -40,6 +43,7 @@ function LevelCreator(levelDefinitions, resources)
       buttonKey = "button" + i;
       overlayImageKey = "b" + levelDef.planets[i].imageKey
       buttonWidth = 200;
+      buttonHeight = 149;
       buttonX = this.getObjectPositionX(levelIdx, i);
       scene[buttonKey] = new NavigationButton({
         image: this.resources.getImage("button"),
@@ -49,7 +53,9 @@ function LevelCreator(levelDefinitions, resources)
         x: buttonX,
         y: 840,
         width: buttonWidth,
-        height: 149
+        height: buttonHeight,
+        clickAreaY: 650,
+        clickAreaHeigth: 340
         }, 
         new MoveToCommand(scene.ship, this.getObjectPositionX(levelIdx, i), 650)
       );
