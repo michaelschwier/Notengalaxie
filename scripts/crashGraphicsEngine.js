@@ -374,6 +374,10 @@ function Button(options, command)
     image: options.image,
     numberOfFrames: 2
   });
+  this.clickAreaX = options.clickAreaX || options.x
+  this.clickAreaY = options.clickAreaY || options.y
+  this.clickAreaWidth = options.clickAreaWidth || options.width
+  this.clickAreaHeigth = options.clickAreaHeigth || options.height
   this.command = command;
   this.buttonReleaseTime = options.buttonReleaseTime || 0.1;
   this.buttonReleaseCountDown = 0.0;    
@@ -393,7 +397,10 @@ function Button(options, command)
 
   this.isHit = function(x, y) 
   {
-    if (x >= this.x && y >= this.y && x < this.x + this.width && y < this.y + this.height) {
+    if (x >= this.clickAreaX 
+        && y >= this.clickAreaY 
+        && x < this.clickAreaX + this.clickAreaWidth 
+        && y < this.clickAreaY + this.clickAreaHeigth) {
       return true;
     }
     else {
