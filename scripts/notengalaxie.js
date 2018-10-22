@@ -26,17 +26,25 @@
   }
   
   // --------------------------------------------------------------------------
-  function IntroPhase(titleDelay = 40) {
+  function IntroPhase(titleDelay = 120) {
     var delayUntilTitle = titleDelay;
-    var delayUntilGame = 40 + delayUntilTitle;
+    var startGame = false;
 
     this.handleMouseMove = function(e)
     { }
 
+    this.handleMouseDown = function(e)
+    { 
+      if (delayUntilTitle < 0) {
+        document.getElementById("gameContainer").style.backgroundImage="none"; 
+        document.getElementById("gameContainer").style.background="black";
+        startGame = true;
+      }
+    }
+
     this.update = function(frameTime = 0)
     {
       delayUntilTitle -= 1;
-      delayUntilGame -= 1;
     }
 
     this.render = function()
@@ -44,17 +52,13 @@
       if (delayUntilTitle == 0) {
         document.getElementById("gameContainer").style.backgroundImage="url(\"images/title-02.png\")";
       }
-      if (delayUntilGame == 0) {
-        document.getElementById("gameContainer").style.backgroundImage="none"; 
-        document.getElementById("gameContainer").style.background="black";
-      }
     }
 
     this.getNextGamePhase = function()
     {
-      if (delayUntilGame < 0) 
+      if (startGame) 
       {
-        return new MainGamePhase(6);
+        return new MainGamePhase(1);
       }
       else {
         return this;
