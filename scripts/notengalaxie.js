@@ -58,7 +58,7 @@
     {
       if (startGame) 
       {
-        return new MainGamePhase(1);
+        return new MainGamePhase(0);
       }
       else {
         return this;
