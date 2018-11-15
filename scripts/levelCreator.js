@@ -1,7 +1,7 @@
 function LevelCreator(levelDefinitions, resources)
 {
-  this.levelDefinitions = levelDefinitions
-  this.resources = resources
+  this.levelDefinitions = levelDefinitions;
+  this.resources = resources;
 
   this.getScene = function(levelIdx)
   {
