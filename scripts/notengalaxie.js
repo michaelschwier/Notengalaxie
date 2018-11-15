@@ -26,7 +26,7 @@
   }
   
   // --------------------------------------------------------------------------
-  function IntroPhase(titleDelay = 120) {
+  function IntroPhase(titleDelay = 1/*120*/) {
     var delayUntilTitle = titleDelay;
     var startGame = false;
 
@@ -58,7 +58,7 @@
     {
       if (startGame) 
       {
-        return new MainGamePhase(0);
+        return new GameStatusPhase(7, 8);
       }
       else {
         return this;
@@ -151,11 +151,11 @@
     this.getNextGamePhase = function()
     { 
       if (this.scene.scoreBar.isMax()) {
-        return new MainGamePhase(this.level + 1);
+        return new GameStatusPhase(this.level, this.level + 1);
       }
       else if (this.scene.scoreBar.isEmpty()) {
-        newLevel = this.level - 1 < 0 ? 0 : this.level - 1
-        return new MainGamePhase(newLevel);
+        //newLevel = this.level - 1 < 0 ? 0 : this.level - 1
+        return new GameStatusPhase(this.level, this.level);
       }
       else {
         return this;
@@ -163,7 +163,120 @@
     }
 
   }
+   
+  // --------------------------------------------------------------------------
+  function GameStatusPhase(currLevel, nextLevel)
+  {
+    this.currLevel = currLevel;
+    this.nextLevel = nextLevel;
+    this.animationPhase = (nextLevel - currLevel) * 2;
+    this.waitTime = 0;
+    GamePhase.call(this, gameStatusCreator.getScene(this.currLevel, this.nextLevel));
+    animationDone = false;
+    startLevel = false;
+
+    this.wait = function(waitTime, startCondition = true)
+    {
+      if (startCondition) {
+        this.waitTime = waitTime;
+        this.animationPhase += 1;
+      }
+    }
+
+    this.waitedEnough = function(frameTime) {
+      this.waitTime -= frameTime;
+      return this.waitTime <= 0;
+    }
     
+    this.animate = function(frameTime)
+    {
+      switch(this.animationPhase) {
+        case 0:
+          if (nextLevel == 0) {
+            this.wait(0.5, this.scene.ship.isWaiting());
+          }
+          else {
+            this.wait(0.5, this.scene.ship.isWaiting() && this.scene["sun"+(this.nextLevel-1)].isActive());
+          }
+          break;
+        case 1:
+          if (this.waitedEnough(frameTime)) {
+            nextLevelPos = gameStatusCreator.getShipPosition(this.nextLevel);
+            prevLevelPos = gameStatusCreator.getShipPosition(this.nextLevel - 1);
+            this.scene.ship.moveTo(prevLevelPos.x + Math.floor((nextLevelPos.x - prevLevelPos.x) / 3),
+                                   prevLevelPos.y + Math.floor((nextLevelPos.y - prevLevelPos.y) / 3))
+            this.animationPhase += 1;
+          }
+          break;
+        case 2:
+          if (nextLevel == 0) {
+            this.wait(0.5, this.scene.ship.isWaiting());
+          }
+          else {
+            this.wait(0.5, this.scene.ship.isWaiting() && this.scene["sun"+(this.nextLevel-1)].isActive());
+          }
+          break;
+        case 3:
+          if (this.waitedEnough(frameTime)) {
+            nextLevelPos = gameStatusCreator.getShipPosition(this.nextLevel);
+            this.scene.ship.moveTo(nextLevelPos.x, nextLevelPos.y)
+            this.animationPhase += 1;
+          }
+          break;
+        case 4:
+          this.wait(0.2, this.scene.ship.isWaiting());
+          break;
+        case 5:
+          if (this.waitedEnough(frameTime)) {
+            this.scene["sun"+this.nextLevel].activate(true);
+            this.animationPhase +=1;
+          }
+          break;
+        case 6:
+          if (this.scene["sun"+this.nextLevel].isActive()) {
+            this.animationPhase +=1;
+          }
+          break;
+        case 7:
+          this.wait(1.0, this.scene.ship.isWaiting());
+          break;
+        case 8:
+          if (this.waitedEnough(frameTime)) {
+            animationDone = true;
+          }
+          break;
+        default:
+          break;
+      }
+      return;
+    }
+
+    this.handleMouseDown = function(e)
+    {
+      if (animationDone) {
+        startLevel = true;
+      }
+    }
+
+    this.super_update = this.update;
+    this.update = function(frameTime)
+    {
+      this.animate(frameTime);
+      this.super_update(frameTime);
+    }
+
+
+    this.getNextGamePhase = function()
+    { 
+      if (startLevel) {
+        return new MainGamePhase(this.nextLevel);
+      }
+      else {
+        return this;
+      }
+    }
+  }
+
   // --------------------------------------------------------------------------
   function getPassedFrameTimeInSeconds(timeStamp)
   {
@@ -203,6 +316,7 @@
     canvas.addEventListener("mousedown", handleMouseDown);
 
     levelCreator = new LevelCreator(levelDefinitions, resources)
+    gameStatusCreator = new GameStatusCreator(levelDefinitions, resources)
   
     gameLoop();
   }
@@ -231,6 +345,7 @@
   resources.addImage("a", "images/planet-a_200x200x1.png");
   resources.addImage("h", "images/planet-h_200x200x1.png");
   resources.addImage("c2", "images/planet-c2_200x200x1.png");
+  resources.addImage("sun", "images/sun_200x200x2.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
