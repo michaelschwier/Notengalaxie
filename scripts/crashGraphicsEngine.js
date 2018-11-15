@@ -362,6 +362,38 @@ function SmoothMover(sprite, timeForMove)
 }
 
 // --------------------------------------------------------------------------
+function OrbitMover(sprite, timeForMove, moveVectorX, moveVectorY)
+{
+  this.sprite = sprite;
+  this.timeForMove = timeForMove;
+  this.startPosX = sprite.x;
+  this.startPosY = sprite.y;
+  this.origWidth = sprite.width;
+  this.origHeight = sprite.height;
+  this.moveVectorX = moveVectorX;
+  this.moveVectorY = moveVectorY;
+  this.currMoveTime = 0.0;
+
+  this.move = function(frameTime)
+  {
+    this.currMoveTime += frameTime;
+    if (this.currMoveTime > this.timeForMove) {
+      this.currMoveTime -= this.timeForMove;
+    }
+    ratioRelTo2PI = (this.currMoveTime / this.timeForMove) * 2 * Math.PI;
+    cosScaled = Math.cos(Math.PI + ratioRelTo2PI);
+    moveRatio = (1.0 + cosScaled) / 2.0;
+    scaleRatio = Math.sin(ratioRelTo2PI)/4;
+
+    this.sprite.x = this.startPosX + this.moveVectorX * moveRatio;
+    this.sprite.y = this.startPosY + this.moveVectorY * scaleRatio;
+    this.sprite.width = this.origWidth * (1 + scaleRatio);
+    this.sprite.height = this.origHeight * (1 + scaleRatio);
+  }
+
+}
+
+// --------------------------------------------------------------------------
 // GUI elements based on sprites so they can be used in a scene
 // --------------------------------------------------------------------------
 function Button(options, command)
