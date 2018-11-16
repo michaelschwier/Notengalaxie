@@ -230,9 +230,21 @@ function SunSystem(options)
   });
   this.scene.sun.setCurrentFrameIdx(1);
 
+
   this.isActive = function()
   {
     return this.activationPhase == 2;
+  }
+
+  this.instantActivate = function()
+  {
+    if (!this.isActive()) {
+      this.scene.sun.setCurrentFrameIdx(0);
+      for (var i = this.levelDef.planets.length; i > 0; i--) {
+        planet = this.addNextPlanet();
+        planet.mover.currMoveTime = this.timeToSpawnPlanet + i;
+      }
+    }
   }
 
   this.activate = function(withSound = false)
@@ -246,6 +258,7 @@ function SunSystem(options)
 
   this.addNextPlanet = function()
   {
+    addedObj = null;
     if (this.activePlanets < this.levelDef.planets.length) {
       imageKey = this.levelDef.planets[this.activePlanets].imageKey;
       this.scene[imageKey] = new OrbitPlanet({
@@ -256,11 +269,13 @@ function SunSystem(options)
         audio: new Audio("audio/" + this.levelDef.planets[this.activePlanets].audioKey + ".mp3"),
         play: this.addPlanetWithSound
       });
+      addedObj = this.scene[imageKey];
       this.activePlanets += 1;
     }
     if (this.activePlanets == this.levelDef.planets.length) {
       this.activationPhase = 2;
     }
+    return addedObj;
   }
   
   this.update = function(frameTime = 0) 

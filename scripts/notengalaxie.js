@@ -58,7 +58,7 @@
     {
       if (startGame) 
       {
-        return new GameStatusPhase(7, 8);
+        return new GameStatusPhase(-1, 0);
       }
       else {
         return this;
@@ -193,10 +193,10 @@
       switch(this.animationPhase) {
         case 0:
           if (nextLevel == 0) {
-            this.wait(0.5, this.scene.ship.isWaiting());
+            this.wait(1.0, this.scene.ship.isWaiting());
           }
           else {
-            this.wait(0.5, this.scene.ship.isWaiting() && this.scene["sun"+(this.nextLevel-1)].isActive());
+            this.wait(1.0, this.scene.ship.isWaiting() && this.scene["sun"+(this.nextLevel-1)].isActive());
           }
           break;
         case 1:
@@ -210,10 +210,10 @@
           break;
         case 2:
           if (nextLevel == 0) {
-            this.wait(0.5, this.scene.ship.isWaiting());
+            this.wait(1.0, this.scene.ship.isWaiting());
           }
           else {
-            this.wait(0.5, this.scene.ship.isWaiting() && this.scene["sun"+(this.nextLevel-1)].isActive());
+            this.wait(1.0, this.scene.ship.isWaiting() && this.scene["sun"+(this.nextLevel-1)].isActive());
           }
           break;
         case 3:

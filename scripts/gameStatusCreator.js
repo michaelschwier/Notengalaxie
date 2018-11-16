@@ -65,7 +65,7 @@ function GameStatusCreator(levelDefinitions, resources)
         y: levelPosition.y
       });
       if (i < nextLevelIdx) {
-        scene[objKey].activate();
+        scene[objKey].instantActivate();
       }
     }
   }
