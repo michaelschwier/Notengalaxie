@@ -196,9 +196,9 @@ function OrbitPlanet(options)
     y: options.y,
     audio: options.audio || null,
   })
-  this.width = 40;
-  this.height = 40;
-  this.mover = new OrbitMover(this, options.orbitTime, -200, 50);
+  this.width = 45;
+  this.height = 45;
+  this.mover = new OrbitMover(this, options.orbitTime, -180, 50);
   if (options.play && options.audio) {
     this.audio.play()
   }
@@ -220,13 +220,14 @@ function SunSystem(options)
   this.addPlanetWithSound = false;
   this.activationPhase = 0;
 
-  this.scene.sun = new MultiFrameSprite({
+  this.scene.sun = new MultiFrameAnimatedSprite({
     image: this.resources.getImage("sun"),
     x: this.x,
     y: this.y,
     width: this.width,
     height: this.height,
-    numberOfFrames: 2
+    numberOfFrames: 2,
+    updateRate: 0.18
   });
   this.scene.sun.setCurrentFrameIdx(1);
 
@@ -251,7 +252,7 @@ function SunSystem(options)
   {
     if (this.activationPhase == 0) {
       this.addPlanetWithSound = withSound;
-      this.scene.sun.setCurrentFrameIdx(0);
+      this.scene.sun.playLoop(3, true);
       this.activationPhase = 1;
     }
   }
@@ -263,7 +264,7 @@ function SunSystem(options)
       imageKey = this.levelDef.planets[this.activePlanets].imageKey;
       this.scene[imageKey] = new OrbitPlanet({
         image: this.resources.getImage(imageKey),
-        x: this.x + 160,
+        x: this.x + 148,
         y: this.y + 60,
         orbitTime : this.planetsOrbitTime,
         audio: new Audio("audio/" + this.levelDef.planets[this.activePlanets].audioKey + ".mp3"),
@@ -305,7 +306,7 @@ function SunSystem(options)
         return [key, 1.0];
       }
       else {
-        return [key, pScene[key].width / 40.0];
+        return [key, pScene[key].width / 45.0];
       }
     });
     sortedScene.sort(function(first, second) {

@@ -35,9 +35,19 @@ function GameStatusCreator(levelDefinitions, resources)
       curLevelIdx = this.levelDefinitions.length;
     }
     var scene = {};
+    this.addBackgroundObjectsToScene(scene)
     this.addSunSystemsToScene(scene, nextLevelIdx);
     this.addShipToScene(scene, curLevelIdx);
     return scene;
+  }
+
+  this.addBackgroundObjectsToScene = function(scene)
+  {
+    scene.backgroundAudio = new AudioCrossfadeLooper({
+      audioFileName: "audio/background.mp3",
+      fadeStart: 8.5,
+      fadeDuration: 0.5
+    });
   }
 
   this.addShipToScene = function(scene, levelIdx)
