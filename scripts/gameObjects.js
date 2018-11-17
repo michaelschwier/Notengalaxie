@@ -25,7 +25,7 @@ function Planet(options)
   })
   this.maxY = 1000;
   this.passedShip = false;
-  this.mover = new ConstantMover(this, 2.0); //should be 6;
+  this.mover = new ConstantMover(this, 6.0 / getUrlParamAsInt("speed", 1.0));
   this.mover.setNewTargetPos(this.x, this.maxY);
   this.audio.play();
 
