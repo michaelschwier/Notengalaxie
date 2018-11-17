@@ -227,6 +227,8 @@ function MultiFrameAnimatedSprite(options)
   this.autoRepeat = false;
   this.updateRate = options.updateRate || 0.04;
   this.currFrameTime = 0;
+  this.loopRepeats = 0;
+  this.rewindAfterLoop = false;
 
   this.play = function() 
   {
@@ -234,9 +236,15 @@ function MultiFrameAnimatedSprite(options)
     this.isPlaying = true;
   }
 
-  this.playLoop = function() 
+  this.playLoop = function(loopRepeats = 0, rewindAfterLoop = false) 
   {
-    this.autoRepeat = true;
+    if (loopRepeats > 0) {
+      this.loopRepeats = loopRepeats;
+    }
+    else {
+      this.autoRepeat = true;
+    }
+    this.rewindAfterLoop = rewindAfterLoop;
     this.play();
   }
 
@@ -244,6 +252,7 @@ function MultiFrameAnimatedSprite(options)
   {
     this.isPlaying = false;
     this.autoRepeat = false;
+    this.loopRepeats = 0;
   }
 
   this.rewind = function()
@@ -261,11 +270,17 @@ function MultiFrameAnimatedSprite(options)
         if (this.frameIndex < this.numberOfFrames - 1) {
           this.increaseCurrentFrameIdxBy(1);
         }
-        else if (this.autoRepeat) {
+        else if (this.autoRepeat || this.loopRepeats > 0) {
           this.frameIndex = 0;
+          if (this.loopRepeats > 0) {
+            this.loopRepeats -= 1;
+          }
         }
         else {
           this.pause();
+          if (this.rewindAfterLoop) {
+            this.rewind();
+          }
         }
       }
     }
