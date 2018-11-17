@@ -250,6 +250,16 @@
         case 8:
           if (this.waitedEnough(frameTime)) {
             animationDone = true;
+            this.animationPhase +=1;
+          }
+          break;
+        case 9:
+          this.wait(6.0, true);
+          break;
+        case 10:
+          if (this.waitedEnough(frameTime)) {
+            startLevel = true;
+            this.animationPhase +=1;
           }
           break;
         default:

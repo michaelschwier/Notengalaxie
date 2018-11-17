@@ -377,7 +377,7 @@ function SmoothMover(sprite, timeForMove)
 }
 
 // --------------------------------------------------------------------------
-function OrbitMover(sprite, timeForMove, moveVectorX, moveVectorY)
+function OrbitMover(sprite, timeForMove, moveVectorX, moveVectorY, callBackOnRepeat = false)
 {
   this.sprite = sprite;
   this.timeForMove = timeForMove;
@@ -388,12 +388,16 @@ function OrbitMover(sprite, timeForMove, moveVectorX, moveVectorY)
   this.moveVectorX = moveVectorX;
   this.moveVectorY = moveVectorY;
   this.currMoveTime = 0.0;
+  this.callBackOnRepeat = callBackOnRepeat;
 
   this.move = function(frameTime)
   {
     this.currMoveTime += frameTime;
     if (this.currMoveTime > this.timeForMove) {
       this.currMoveTime -= this.timeForMove;
+      if (this.callBackOnRepeat) {
+        this.sprite.repeatCallback();
+      }
     }
     ratioRelTo2PI = (this.currMoveTime / this.timeForMove) * 2 * Math.PI;
     cosScaled = Math.cos(Math.PI + ratioRelTo2PI);

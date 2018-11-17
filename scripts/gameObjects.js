@@ -198,9 +198,18 @@ function OrbitPlanet(options)
   })
   this.width = 45;
   this.height = 45;
-  this.mover = new OrbitMover(this, options.orbitTime, -180, 50);
+  this.play = options.play;
+  this.mover = new OrbitMover(this, options.orbitTime, -180, 50, this.play);
   if (options.play && options.audio) {
     this.audio.play()
+  }
+
+  this.repeatCallback = function()
+  {
+    if (this.play && options.audio) {
+      this.audio.play();
+      this.play = false;
+    }
   }
 }
 
