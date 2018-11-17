@@ -26,9 +26,11 @@
   }
   
   // --------------------------------------------------------------------------
-  function IntroPhase(titleDelay = 1/*120*/) {
+  function IntroPhase(titleDelay = 120/*120*/) {
     var delayUntilTitle = titleDelay;
     var startGame = false;
+    document.getElementById("gameContainer").style.backgroundColor="white";
+    document.getElementById("gameContainer").style.backgroundImage="url(\"images/title-01.png\")"; 
 
     this.handleMouseMove = function(e)
     { }
@@ -37,7 +39,7 @@
     { 
       if (delayUntilTitle < 0) {
         document.getElementById("gameContainer").style.backgroundImage="none"; 
-        document.getElementById("gameContainer").style.background="black";
+        document.getElementById("gameContainer").style.backgroundColor="black";
         startGame = true;
       }
     }
@@ -220,7 +222,12 @@
           if (this.waitedEnough(frameTime)) {
             nextLevelPos = gameStatusCreator.getShipPosition(this.nextLevel);
             this.scene.ship.moveTo(nextLevelPos.x, nextLevelPos.y)
-            this.animationPhase += 1;
+            if (nextLevel < levelDefinitions.length) {
+              this.animationPhase += 1;
+            }
+            else {
+              this.animationPhase = 7;
+            }
           }
           break;
         case 4:
@@ -269,7 +276,12 @@
     this.getNextGamePhase = function()
     { 
       if (startLevel) {
-        return new MainGamePhase(this.nextLevel);
+        if (nextLevel < levelDefinitions.length) {
+          return new MainGamePhase(this.nextLevel);
+        }
+        else {
+          return new IntroPhase();
+        }
       }
       else {
         return this;
