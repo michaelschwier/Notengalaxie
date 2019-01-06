@@ -60,7 +60,7 @@
     {
       if (startGame) 
       {
-        return new GameStatusPhase(-1, 0);
+        return new GameStatusPhase(9, 10);
       }
       else {
         return this;
@@ -220,13 +220,13 @@
           break;
         case 3:
           if (this.waitedEnough(frameTime)) {
-            nextLevelPos = gameStatusCreator.getShipPosition(this.nextLevel);
-            this.scene.ship.moveTo(nextLevelPos.x, nextLevelPos.y)
             if (nextLevel < levelDefinitions.length) {
+              nextLevelPos = gameStatusCreator.getShipPosition(this.nextLevel);
+              this.scene.ship.moveTo(nextLevelPos.x, nextLevelPos.y);
               this.animationPhase += 1;
             }
             else {
-              this.animationPhase = 7;
+              this.animationPhase = 11;
             }
           }
           break;
@@ -259,7 +259,45 @@
         case 10:
           if (this.waitedEnough(frameTime)) {
             startLevel = true;
+          }
+          break;
+        // finished animation
+        case 11:
+          this.wait(0.2, this.scene.ship.isWaiting());
+          break;
+        case 12:
+          if (this.waitedEnough(frameTime)) {
+            this.scene.finish.setCurrentFrameIdx(1);
+            this.scene.finishBlink.setCurrentFrameIdx(1);
+            this.scene.finishBlink.playLoop();
             this.animationPhase +=1;
+          }
+          break;
+        case 13:
+          this.wait(1.0, this.scene.ship.isWaiting());
+          break;
+        case 14:
+          if (this.waitedEnough(frameTime)) {
+            nextLevelPos = gameStatusCreator.getShipPosition(levelDefinitions.length);
+            this.scene.ship.moveTo(nextLevelPos.x, nextLevelPos.y);
+            this.animationPhase += 1;
+          }
+          break;
+        case 15:
+          this.wait(1.0, this.scene.ship.isWaiting());
+          break;
+        case 16:
+          if (this.waitedEnough(frameTime)) {
+            animationDone = true;
+            this.animationPhase +=1;
+          }
+          break;
+        case 17:
+          this.wait(6.0, true);
+          break;
+        case 18:
+          if (this.waitedEnough(frameTime)) {
+            startLevel = true;
           }
           break;
         default:
@@ -366,7 +404,11 @@
   resources.addImage("a", "images/planet-a_200x200x1.png");
   resources.addImage("h", "images/planet-h_200x200x1.png");
   resources.addImage("c2", "images/planet-c2_200x200x1.png");
+  resources.addImage("statusPath", "images/status-path_800x1000x1.png");
   resources.addImage("sun", "images/sun_200x200x2.png");
+  resources.addImage("start", "images/start-level_200x200x1.png");
+  resources.addImage("finish", "images/pokal_200x200x2.png");
+  resources.addImage("finishBlink", "images/pokal-blink_200x200x2.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
