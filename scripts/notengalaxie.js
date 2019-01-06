@@ -60,7 +60,7 @@
     {
       if (startGame) 
       {
-        return new GameStatusPhase(9, 10);
+        return new GameStatusPhase(7, 8);
       }
       else {
         return this;
