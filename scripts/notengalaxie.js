@@ -167,6 +167,35 @@
   }
    
   // --------------------------------------------------------------------------
+  function ExplainPhase()
+  {
+    var scene = {};
+    blinkDelay = 1.0 + Math.random() * 2;
+    scene.portcrash = new MultiFrameAnimatedSprite({
+      image: resources.getImage("portcrashExplain"),
+      x: 50,
+      y: 50,
+      numberOfFrames: 2,
+      updateRate: 0.1  
+    });
+    GamePhase.call(this, scene);
+
+    this.super_update = this.update;
+    this.update = function(frameTime)
+    {
+      if (blinkDelay < 0) {
+        scene.portcrash.playLoop(1, true);
+        blinkDelay = 1.0 + Math.random() * 2;
+      }
+      else {
+        blinkDelay -= frameTime;
+      }
+      this.super_update(frameTime);
+    }
+
+  }
+  
+  // --------------------------------------------------------------------------
   function GameStatusPhase(currLevel, nextLevel)
   {
     this.currLevel = currLevel;
@@ -409,6 +438,7 @@
   resources.addImage("start", "images/start-level_200x200x1.png");
   resources.addImage("finish", "images/pokal_200x200x2.png");
   resources.addImage("finishBlink", "images/pokal-blink_200x200x2.png");
+  resources.addImage("portcrashExplain", "images/portcrash-zwinker.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
