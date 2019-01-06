@@ -39,7 +39,6 @@
     { 
       if (delayUntilTitle < 0) {
         document.getElementById("gameContainer").style.backgroundImage="none"; 
-        document.getElementById("gameContainer").style.backgroundColor="black";
         startGame = true;
       }
     }
@@ -61,6 +60,7 @@
       if (startGame) 
       {
         return new GameStatusPhase(7, 8);
+        //return new ExplainPhase();
       }
       else {
         return this;
@@ -184,7 +184,7 @@
     this.update = function(frameTime)
     {
       if (blinkDelay < 0) {
-        scene.portcrash.playLoop(1, true);
+        scene.portcrash.play(true);
         blinkDelay = 1.0 + Math.random() * 2;
       }
       else {
@@ -198,6 +198,7 @@
   // --------------------------------------------------------------------------
   function GameStatusPhase(currLevel, nextLevel)
   {
+    document.getElementById("gameContainer").style.backgroundColor="black";
     this.currLevel = currLevel;
     this.nextLevel = nextLevel;
     this.animationPhase = (nextLevel - currLevel) * 2;
