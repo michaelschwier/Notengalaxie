@@ -347,7 +347,6 @@
   // START
   // --------------------------------------------------------------------------
   resources = new ResourcePreLoader();
-  resources.addImage("background", "images/background_800x1000x1.png")
   resources.addImage("hamster", "images/hamster_100x74x2.png")  
   resources.addImage("button", "images/button_200x149x2.png")
   resources.addImage("ship", "images/ship_200x169x2.png");

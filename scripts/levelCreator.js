@@ -22,9 +22,6 @@ function LevelCreator(levelDefinitions, resources)
       fadeStart: 8.5,
       fadeDuration: 0.5
     });
-    scene.background = new Sprite({
-      image: this.resources.getImage("background"),
-    });
     scene.planet = null;
     scene.scoreBar = new ScoreBar({
       image: this.resources.getImage("hamster")
