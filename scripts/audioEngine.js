@@ -29,5 +29,12 @@
         }
       }
     }
+
+    this.stop = function()
+    {
+      currAudio = this.audio[this.currAudioIdx]
+      currAudio.pause();
+      currAudio.currentTime = 0.0;
+    }
   }
 
