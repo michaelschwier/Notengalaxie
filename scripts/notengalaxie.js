@@ -59,8 +59,7 @@
     {
       if (startGame) 
       {
-        return new GameStatusPhase(7, 8);
-        //return new ExplainPhase();
+        return new ExplainPhase();
       }
       else {
         return this;
@@ -156,7 +155,6 @@
         return new GameStatusPhase(this.level, this.level + 1);
       }
       else if (this.scene.scoreBar.isEmpty()) {
-        //newLevel = this.level - 1 < 0 ? 0 : this.level - 1
         return new GameStatusPhase(this.level, this.level);
       }
       else {
@@ -170,27 +168,95 @@
   function ExplainPhase()
   {
     var scene = {};
+    timePerExplain = 20;
+    timePassed = 20;
+    skip = false;
+    startGame = false;
+    this.animationPhase = 1;
     blinkDelay = 1.0 + Math.random() * 2;
     scene.portcrash = new MultiFrameAnimatedSprite({
       image: resources.getImage("portcrashExplain"),
-      x: 50,
-      y: 50,
+      x: 0,
+      y: 350,
       numberOfFrames: 2,
       updateRate: 0.1  
     });
     GamePhase.call(this, scene);
 
+    this.animate = function(frameTime)
+    {
+      if ("portcrash" in scene) {
+        if (blinkDelay < 0) {
+          scene.portcrash.play(true);
+          blinkDelay = 1.0 + Math.random() * 2;
+        }
+        else {
+          blinkDelay -= frameTime;
+        }  
+      }
+
+      timePassed += frameTime
+      switch(this.animationPhase) {
+        case 6:
+          if ((timePassed >= timePerExplain) || skip) {
+            timePassed = 0;
+            delete scene.portcrash;
+            delete scene.explain;
+            scene.countdown = new MultiFrameAnimatedSprite({
+              image: resources.getImage("countdown"),
+              x: 0,
+              y: 100,
+              numberOfFrames: 3,
+              updateRate: 1.0
+            });
+            scene.countdown.play();
+            this.animationPhase++;
+          }
+          break;
+        case 7:
+          if (timePassed >= 3) {
+            startGame = true;
+            this.animationPhase++;
+          }
+          break;
+        case 8:
+          break;
+        default:
+          if ((timePassed >= timePerExplain) || skip) {
+            skip = false;
+            timePassed = 0;
+            scene.explain = new Sprite({
+              image: resources.getImage("explain0"+this.animationPhase),
+              x: 280,
+              y: 0
+            });
+            this.animationPhase++;
+          }
+          break;
+      }
+      return;
+    }
+
+    this.handleMouseDown = function(e)
+    {
+      skip = true;
+    }
+
     this.super_update = this.update;
     this.update = function(frameTime)
     {
-      if (blinkDelay < 0) {
-        scene.portcrash.play(true);
-        blinkDelay = 1.0 + Math.random() * 2;
+      this.animate(frameTime);
+      this.super_update(frameTime);
+    }
+
+    this.getNextGamePhase = function()
+    { 
+      if (startGame) {
+        return new GameStatusPhase(7, 8);
       }
       else {
-        blinkDelay -= frameTime;
+        return this;
       }
-      this.super_update(frameTime);
     }
 
   }
@@ -358,6 +424,7 @@
           return new MainGamePhase(this.nextLevel);
         }
         else {
+          this.scene.backgroundAudio.stop();
           return new IntroPhase();
         }
       }
@@ -439,7 +506,13 @@
   resources.addImage("start", "images/start-level_200x200x1.png");
   resources.addImage("finish", "images/pokal_200x200x2.png");
   resources.addImage("finishBlink", "images/pokal-blink_200x200x2.png");
-  resources.addImage("portcrashExplain", "images/portcrash-zwinker.png");
+  resources.addImage("portcrashExplain", "images/portcrash_400x650x2.png");
+  resources.addImage("explain01", "images/Blase01_800x800x1.png");
+  resources.addImage("explain02", "images/Blase02_800x800x1.png");
+  resources.addImage("explain03", "images/Blase03_800x800x1.png");
+  resources.addImage("explain04", "images/Blase04_800x800x1.png");
+  resources.addImage("explain05", "images/Blase05_800x800x1.png");
+  resources.addImage("countdown", "images/countdown_800x800x3.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
