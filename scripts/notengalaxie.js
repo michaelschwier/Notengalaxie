@@ -168,91 +168,17 @@
   function ExplainPhase()
   {
     var scene = {};
-    timePerExplain = 20;
-    timePassed = 20;
-    skip = false;
-    startGame = false;
-    this.animationPhase = 1;
-    blinkDelay = 1.0 + Math.random() * 2;
-    scene.portcrash = new MultiFrameAnimatedSprite({
-      image: resources.getImage("portcrashExplain"),
-      x: 0,
-      y: 350,
-      numberOfFrames: 2,
-      updateRate: 0.1  
-    });
+    portcrash = new PortrashTalks(
+      ["explain01", "explain02", "explain03", "explain04", "explain05"],
+      resources);
+    countdown = new Countdown(resources);
+    scene.animationSequence = new AnimationSequence([portcrash, countdown])
     GamePhase.call(this, scene);
-
-    this.animate = function(frameTime)
-    {
-      if ("portcrash" in scene) {
-        if (blinkDelay < 0) {
-          scene.portcrash.play(true);
-          blinkDelay = 1.0 + Math.random() * 2;
-        }
-        else {
-          blinkDelay -= frameTime;
-        }  
-      }
-
-      timePassed += frameTime
-      switch(this.animationPhase) {
-        case 6:
-          if ((timePassed >= timePerExplain) || skip) {
-            timePassed = 0;
-            delete scene.portcrash;
-            delete scene.explain;
-            scene.countdown = new MultiFrameAnimatedSprite({
-              image: resources.getImage("countdown"),
-              x: 0,
-              y: 100,
-              numberOfFrames: 3,
-              updateRate: 1.0
-            });
-            scene.countdown.play();
-            this.animationPhase++;
-          }
-          break;
-        case 7:
-          if (timePassed >= 3) {
-            startGame = true;
-            this.animationPhase++;
-          }
-          break;
-        case 8:
-          break;
-        default:
-          if ((timePassed >= timePerExplain) || skip) {
-            skip = false;
-            timePassed = 0;
-            scene.explain = new Sprite({
-              image: resources.getImage("explain0"+this.animationPhase),
-              x: 280,
-              y: 0
-            });
-            this.animationPhase++;
-          }
-          break;
-      }
-      return;
-    }
-
-    this.handleMouseDown = function(e)
-    {
-      skip = true;
-    }
-
-    this.super_update = this.update;
-    this.update = function(frameTime)
-    {
-      this.animate(frameTime);
-      this.super_update(frameTime);
-    }
 
     this.getNextGamePhase = function()
     { 
-      if (startGame) {
-        return new GameStatusPhase(7, 8);
+      if (scene.animationSequence.isDone()) {
+        return new GameStatusPhase(-1, 0);
       }
       else {
         return this;
