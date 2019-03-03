@@ -63,6 +63,7 @@ function LevelCreator(levelDefinitions, resources)
   {
     levelDef = levelDefinitions[levelIdx];
     minSpawnTime = levelDef.minSpawnTime;
+    yPosition = -500 - (levelIdx * 100);
     images = [];
     audios = [];
     xPositions = [];
@@ -71,7 +72,7 @@ function LevelCreator(levelDefinitions, resources)
       audios.push("audio/" + levelDef.planets[i].audioKey + ".mp3");
       xPositions.push(this.getObjectPositionX(levelIdx, i));
     }
-    scene.planetSpawner = new PlanetSpawner(minSpawnTime, images, audios, xPositions, scene);
+    scene.planetSpawner = new PlanetSpawner(minSpawnTime, images, audios, xPositions, yPosition, scene);
   }
 
   this.getObjectPositionX = function(levelIdx, planetIdx)

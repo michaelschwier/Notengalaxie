@@ -20,7 +20,7 @@ function Planet(options)
   PlanetBase.call(this, {
     image: options.image,
     x: options.x,
-    y: -400,
+    y: options.y || -400,
     audio: options.audio
   })
   this.maxY = 1000;

@@ -1,4 +1,4 @@
-function PlanetSpawner(minSpawnTime, images, audios, xPositions, scene)
+function PlanetSpawner(minSpawnTime, images, audios, xPositions, yPosition, scene)
 {
   this.minSpawnTime = minSpawnTime;
   this.timeSinceLastSpawn = 0.0;
@@ -19,6 +19,7 @@ function PlanetSpawner(minSpawnTime, images, audios, xPositions, scene)
         this.scene.planet = new Planet({
           image: img, 
           x: xPositions[choice],
+          y: yPosition,
           audio: audio
         });
         this.timeSinceLastSpawn = 0;
