@@ -1,2 +1,2 @@
 # Notengalaxie
-(c) 2017-2018 All rights reserved
+(c) 2017-2019 All rights reserved
