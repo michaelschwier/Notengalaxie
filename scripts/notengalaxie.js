@@ -152,7 +152,17 @@
     this.getNextGamePhase = function()
     { 
       if (this.scene.scoreBar.isMax()) {
-        return new GameStatusPhase(this.level, this.level + 1);
+        if (this.level == 4) {
+          this.scene.backgroundAudio.stop();
+          return new MidgameMotivationPhase();
+        }
+        else if (this.level == 8) {
+          this.scene.backgroundAudio.stop();
+          return new LastLevelMotivationPhase();
+        }
+        else {
+          return new GameStatusPhase(this.level, this.level + 1);
+        }
       }
       else if (this.scene.scoreBar.isEmpty()) {
         return new GameStatusPhase(this.level, this.level);
@@ -167,9 +177,10 @@
   // --------------------------------------------------------------------------
   function ExplainPhase()
   {
+    document.getElementById("gameContainer").style.backgroundColor="white";
     var scene = {};
     portcrash = new PortrashTalks(
-      ["explain01", "explain02", "explain03", "explain04", "explain05"],
+      ["explain01", "explain02", "explain03", "explain04", "explain05", "explain06"],
       resources);
     countdown = new Countdown(resources);
     scene.animationSequence = new AnimationSequence([portcrash, countdown])
@@ -179,6 +190,72 @@
     { 
       if (scene.animationSequence.isDone()) {
         return new GameStatusPhase(-1, 0);
+      }
+      else {
+        return this;
+      }
+    }
+
+  }
+
+  // --------------------------------------------------------------------------
+  function MidgameMotivationPhase()
+  {
+    document.getElementById("gameContainer").style.backgroundColor="white";
+    var scene = {};
+    scene.portcrash = new PortrashTalks(
+      ["motivate01"],
+      resources);
+    GamePhase.call(this, scene);
+
+    this.getNextGamePhase = function()
+    { 
+      if (scene.portcrash.isDone()) {
+        return new GameStatusPhase(4, 5);
+      }
+      else {
+        return this;
+      }
+    }
+
+  }
+  
+  // --------------------------------------------------------------------------
+  function LastLevelMotivationPhase()
+  {
+    document.getElementById("gameContainer").style.backgroundColor="white";
+    var scene = {};
+    scene.portcrash = new PortrashTalks(
+      ["motivate02"],
+      resources);
+    GamePhase.call(this, scene);
+
+    this.getNextGamePhase = function()
+    { 
+      if (scene.portcrash.isDone()) {
+        return new GameStatusPhase(8, 9);
+      }
+      else {
+        return this;
+      }
+    }
+
+  }
+  
+  // --------------------------------------------------------------------------
+  function FinishedMotivationPhase()
+  {
+    document.getElementById("gameContainer").style.backgroundColor="white";
+    var scene = {};
+    scene.portcrash = new PortrashTalks(
+      ["motivate03", "motivate04"],
+      resources);
+    GamePhase.call(this, scene);
+
+    this.getNextGamePhase = function()
+    { 
+      if (scene.portcrash.isDone()) {
+        return new IntroPhase;
       }
       else {
         return this;
@@ -351,7 +428,7 @@
         }
         else {
           this.scene.backgroundAudio.stop();
-          return new IntroPhase();
+          return new FinishedMotivationPhase();
         }
       }
       else {
@@ -437,7 +514,12 @@
   resources.addImage("explain02", "images/Blase02_800x800x1.png");
   resources.addImage("explain03", "images/Blase03_800x800x1.png");
   resources.addImage("explain04", "images/Blase04_800x800x1.png");
-  resources.addImage("explain05", "images/Blase05_800x800x1.png");
+  resources.addImage("explain05", "images/Blase04a_500x500x1.png");
+  resources.addImage("explain06", "images/Blase05_800x800x1.png");
+  resources.addImage("motivate01", "images/Blase06_500x500x1.png");
+  resources.addImage("motivate02", "images/Blase07_500x500x1.png");
+  resources.addImage("motivate03", "images/Blase08_500x500x1.png");
+  resources.addImage("motivate04", "images/Blase09_500x500x1.png");
   resources.addImage("countdown", "images/countdown_800x800x3.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
