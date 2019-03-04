@@ -5,6 +5,12 @@ function AnimationSequence(animationList)
   this.currAnimationIdx = 0;
   this.lastAnimationIdx = this.animationList.length - 1;
 
+  this.append = function(animation)
+  {
+    this.animationList.push(animation);
+    this.lastAnimationIdx += 1;
+  }
+
   this.handleMouseDown = function(e)
   {
     this.animationList[this.currAnimationIdx].handleMouseDown(e)
@@ -156,5 +162,43 @@ function Countdown(resources)
 }
 
 // --------------------------------------------------------------------------
+function HamsterToken(resources)
+{
+  this.timePassed = 0;
+  this.hamster = new MultiFrameAnimatedSprite({
+    image: resources.getImage("hamsterToken"),
+    x: 0,
+    y: 100,
+    numberOfFrames: 2,
+    updateRate: 0.25
+  });
+  this.hamster.playLoop(4, true);
+
+  this.handleMouseDown = function(e)
+  {
+  }
+  
+  this.update = function(frameTime = 0)
+  {
+    this.timePassed += frameTime;
+    this.hamster.update(frameTime);
+  }
+
+  this.render = function(renderContext)
+  {
+    this.hamster.render(renderContext);
+  }
+
+  this.isDone = function()
+  {
+    if (this.timePassed >= 4) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+}
 
 

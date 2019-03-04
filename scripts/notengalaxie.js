@@ -152,17 +152,8 @@
     this.getNextGamePhase = function()
     { 
       if (this.scene.scoreBar.isMax()) {
-        if (this.level == 4) {
-          this.scene.backgroundAudio.stop();
-          return new MidgameMotivationPhase();
-        }
-        else if (this.level == 8) {
-          this.scene.backgroundAudio.stop();
-          return new LastLevelMotivationPhase();
-        }
-        else {
-          return new GameStatusPhase(this.level, this.level + 1);
-        }
+        this.scene.backgroundAudio.stop();
+        return new LevelFinishedPhase(this.level);
       }
       else if (this.scene.scoreBar.isEmpty()) {
         return new GameStatusPhase(this.level, this.level);
@@ -189,59 +180,14 @@
     this.getNextGamePhase = function()
     { 
       if (scene.animationSequence.isDone()) {
-        return new GameStatusPhase(-1, 0);
+        return new GameStatusPhase(3, 4);
       }
       else {
         return this;
       }
     }
-
   }
 
-  // --------------------------------------------------------------------------
-  function MidgameMotivationPhase()
-  {
-    document.getElementById("gameContainer").style.backgroundColor="white";
-    var scene = {};
-    scene.portcrash = new PortrashTalks(
-      ["motivate01"],
-      resources);
-    GamePhase.call(this, scene);
-
-    this.getNextGamePhase = function()
-    { 
-      if (scene.portcrash.isDone()) {
-        return new GameStatusPhase(4, 5);
-      }
-      else {
-        return this;
-      }
-    }
-
-  }
-  
-  // --------------------------------------------------------------------------
-  function LastLevelMotivationPhase()
-  {
-    document.getElementById("gameContainer").style.backgroundColor="white";
-    var scene = {};
-    scene.portcrash = new PortrashTalks(
-      ["motivate02"],
-      resources);
-    GamePhase.call(this, scene);
-
-    this.getNextGamePhase = function()
-    { 
-      if (scene.portcrash.isDone()) {
-        return new GameStatusPhase(8, 9);
-      }
-      else {
-        return this;
-      }
-    }
-
-  }
-  
   // --------------------------------------------------------------------------
   function FinishedMotivationPhase()
   {
@@ -261,9 +207,39 @@
         return this;
       }
     }
-
   }
   
+  // --------------------------------------------------------------------------
+  function LevelFinishedPhase(currLevel)
+  {
+    document.getElementById("gameContainer").style.backgroundColor="white";
+    this.currLevel = currLevel;
+    var scene = {}
+    hamsterToken = new HamsterToken(resources);
+    scene.animationSequence = new AnimationSequence([hamsterToken])
+    if (this.currLevel == 4) {
+      scene.animationSequence.append(new PortrashTalks(
+        ["motivate01"],
+        resources));
+    }
+    else if (this.currLevel == 8) {
+      scene.animationSequence.append(new PortrashTalks(
+        ["motivate02"],
+        resources));
+    }
+    GamePhase.call(this, scene);
+
+    this.getNextGamePhase = function()
+    { 
+      if (scene.animationSequence.isDone()) {
+        return new GameStatusPhase(this.currLevel, this.currLevel + 1);
+      }
+      else {
+        return this;
+      }
+    }
+  }
+
   // --------------------------------------------------------------------------
   function GameStatusPhase(currLevel, nextLevel)
   {
@@ -521,6 +497,9 @@
   resources.addImage("motivate03", "images/Blase08_500x500x1.png");
   resources.addImage("motivate04", "images/Blase09_500x500x1.png");
   resources.addImage("countdown", "images/countdown_800x800x3.png");
+  resources.addImage("hamsterdriveTitle", "images/hamsterdrive_341x45x1.png");
+  resources.addImage("hamsterDriveUnit", "images/hamster-unit_100x100x2.png");
+  resources.addImage("hamsterToken", "images/hamster-unit_800x800x2.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
