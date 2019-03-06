@@ -180,7 +180,7 @@
     this.getNextGamePhase = function()
     { 
       if (scene.animationSequence.isDone()) {
-        return new GameStatusPhase(3, 4);
+        return new GameStatusPhase(-1, 0);
       }
       else {
         return this;
@@ -216,7 +216,8 @@
     this.currLevel = currLevel;
     var scene = {}
     hamsterToken = new HamsterToken(resources);
-    scene.animationSequence = new AnimationSequence([hamsterToken])
+    hamsterDriveStatus = new HamsterDriveStatus(currLevel, resources);
+    scene.animationSequence = new AnimationSequence([hamsterToken, hamsterDriveStatus])
     if (this.currLevel == 4) {
       scene.animationSequence.append(new PortrashTalks(
         ["motivate01"],

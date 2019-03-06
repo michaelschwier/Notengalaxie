@@ -39,7 +39,6 @@ function AnimationSequence(animationList)
       return false;
     }
   }
-
 }
 
 // --------------------------------------------------------------------------
@@ -118,7 +117,6 @@ function PortrashTalks(speechBubbleIds, resources)
       return false;
     }
   }
-
 }
 
 // --------------------------------------------------------------------------
@@ -158,7 +156,6 @@ function Countdown(resources)
       return false;
     }
   }
-
 }
 
 // --------------------------------------------------------------------------
@@ -198,7 +195,61 @@ function HamsterToken(resources)
       return false;
     }
   }
-
 }
 
+// --------------------------------------------------------------------------
+function HamsterDriveStatus(finishedLevel, resources)
+{
+  this.timePassed = 0;
+  this.title = new Sprite({
+    image: resources.getImage("hamsterdriveTitle"),
+    x: 230,
+    y: 50,
+  });
+  this.units = [];
+  for (i = 0; i < 10; i++) {
+    this.units[i] = new MultiFrameAnimatedSprite({
+      image: resources.getImage("hamsterDriveUnit"),
+      x: 350,
+      y: 850 - i * 83,
+      numberOfFrames: 2,
+      updateRate: 0.25
+    });
+    if (i < finishedLevel) {
+      this.units[i].setCurrentFrameIdx(1);
+    }
+  }
+  this.units[finishedLevel].playLoop(6);
+
+  this.handleMouseDown = function(e)
+  {
+  }
+  
+  this.update = function(frameTime = 0)
+  {
+    this.timePassed += frameTime;
+    this.title.update(frameTime);
+    for (i = 0; i < 10; i++) {
+      this.units[i].update(frameTime);
+    }
+  }
+
+  this.render = function(renderContext)
+  {
+    this.title.render(renderContext);
+    for (i = 0; i < 10; i++) {
+      this.units[i].render(renderContext);
+    }
+  }
+
+  this.isDone = function()
+  {
+    if (this.timePassed >= 6) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
 
