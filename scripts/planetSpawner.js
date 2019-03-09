@@ -5,6 +5,7 @@ function PlanetSpawner(minSpawnTime, images, audios, xPositions, yPosition, scen
   this.images = images;
   this.audios = audios;
   this.xPositions = xPositions;
+  this.yPosition = yPosition;
   this.scene = scene;
   this.shuffledIndexList = []
 
@@ -16,6 +17,10 @@ function PlanetSpawner(minSpawnTime, images, audios, xPositions, yPosition, scen
         var choice = this.getRandomIndex();
         var img = this.images[choice];
         var audio = new Audio(this.audios[choice]);
+        var yPosition = this.yPosition;
+        if (this.scene.scoreBar) {
+          yPosition -= this.scene.scoreBar.getScore() * 10;
+        }
         this.scene.planet = new Planet({
           image: img, 
           x: xPositions[choice],
