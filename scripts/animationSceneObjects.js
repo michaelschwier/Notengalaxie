@@ -1,9 +1,16 @@
 // --------------------------------------------------------------------------
-function AnimationSequence(animationList)
+function AnimationSequence(animationList, playBackgroundAudio = false)
 {
   this.animationList = animationList;
   this.currAnimationIdx = 0;
   this.lastAnimationIdx = this.animationList.length - 1;
+  if (playBackgroundAudio) {
+    this.backgroundAudio = new AudioCrossfadeLooper({
+      audioFileName: "audio/background.mp3",
+      fadeStart: 8.5,
+      fadeDuration: 0.5
+    });
+  }
 
   this.append = function(animation)
   {
@@ -23,6 +30,9 @@ function AnimationSequence(animationList)
       this.currAnimationIdx += 1;
     }
     this.animationList[this.currAnimationIdx].update(frameTime);
+    if (this.backgroundAudio) {
+      this.backgroundAudio.update(frameTime)
+    }
   }
 
   this.render = function(renderContext)

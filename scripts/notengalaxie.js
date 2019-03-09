@@ -152,7 +152,6 @@
     this.getNextGamePhase = function()
     { 
       if (this.scene.scoreBar.isMax()) {
-        this.scene.backgroundAudio.stop();
         return new LevelFinishedPhase(this.level);
       }
       else if (this.scene.scoreBar.isEmpty()) {
@@ -201,7 +200,7 @@
     this.getNextGamePhase = function()
     { 
       if (scene.portcrash.isDone()) {
-        return new IntroPhase;
+        return new IntroPhase();
       }
       else {
         return this;
@@ -217,7 +216,7 @@
     var scene = {}
     hamsterToken = new HamsterToken(resources);
     hamsterDriveStatus = new HamsterDriveStatus(currLevel, resources);
-    scene.animationSequence = new AnimationSequence([hamsterToken, hamsterDriveStatus])
+    scene.animationSequence = new AnimationSequence([hamsterToken, hamsterDriveStatus], true)
     if (this.currLevel == 4) {
       scene.animationSequence.append(new PortrashTalks(
         ["motivate01"],
