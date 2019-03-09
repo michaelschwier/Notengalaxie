@@ -40,6 +40,9 @@
       if (delayUntilTitle < 0) {
         document.getElementById("gameContainer").style.backgroundImage="none"; 
         startGame = true;
+        // hack to convince Safari and other browsers to play audio
+        dummyAudio = new Audio("audio/c1.mp3");
+        dummyAudio.play();
       }
     }
 
