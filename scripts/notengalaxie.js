@@ -121,6 +121,7 @@
   function MainGamePhase(level)
   {
     this.level = level;
+    this.finishedDelay = 2.0;
     GamePhase.call(this, levelCreator.getScene(this.level));
 
     this.collisionDetection = function()
@@ -144,20 +145,29 @@
       }
     }
 
+    this.waitIfFinished = function(frameTime) {
+      if (this.scene.scoreBar.isMax() || this.scene.scoreBar.isEmpty()) {
+        this.finishedDelay -= frameTime;
+        if (this.scene.planetSpawner) {
+          delete this.scene.planetSpawner;
+        }
+      }
+    }
+
     this.super_update = this.update;
     this.update = function(frameTime)
     {
       this.collisionDetection();
-
+      this.waitIfFinished(frameTime);
       this.super_update(frameTime);
     }
 
     this.getNextGamePhase = function()
     { 
-      if (this.scene.scoreBar.isMax()) {
+      if (this.scene.scoreBar.isMax() && (this.finishedDelay < 0)) {
         return new LevelFinishedPhase(this.level);
       }
-      else if (this.scene.scoreBar.isEmpty()) {
+      else if (this.scene.scoreBar.isEmpty() && (this.finishedDelay < 0)) {
         return new GameStatusPhase(this.level, this.level);
       }
       else {
