@@ -215,7 +215,7 @@
     this.handleMouseDown = function(e)
     { 
       if (scene.portcrash.isDone()) {
-        window.open("https://portcrash.de/wp-content/uploads/2019/03/Bastelanleitung-Pokal-Notengalaxie.pdf");
+        window.open("https://portcrash.de/bastelanleitung/");
         restartGame = true;
       }
       else {
