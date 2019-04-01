@@ -204,15 +204,28 @@
   function FinishedMotivationPhase()
   {
     document.getElementById("gameContainer").style.backgroundColor="white";
+    var restartGame = false;
     var scene = {};
     scene.portcrash = new PortrashTalks(
-      ["motivate03", "motivate04"],
+      ["motivate03", "motivate04", "motivate05", "motivate06", "motivate07"],
       resources);
     GamePhase.call(this, scene);
 
-    this.getNextGamePhase = function()
+    this.super_handleMouseDown = this.handleMouseDown;
+    this.handleMouseDown = function(e)
     { 
       if (scene.portcrash.isDone()) {
+        window.open("https://portcrash.de/wp-content/uploads/2019/03/Bastelanleitung-Pokal-Notengalaxie.pdf");
+        restartGame = true;
+      }
+      else {
+        this.super_handleMouseDown(e)
+      }
+    }
+
+    this.getNextGamePhase = function()
+    { 
+      if (restartGame) {
         return new IntroPhase();
       }
       else {
@@ -508,7 +521,10 @@
   resources.addImage("motivate01", "images/Blase06_500x500x1.png");
   resources.addImage("motivate02", "images/Blase07_500x500x1.png");
   resources.addImage("motivate03", "images/Blase08_500x500x1.png");
-  resources.addImage("motivate04", "images/Blase09_500x500x1.png");
+  resources.addImage("motivate04", "images/Blase10_500x500x1.png");
+  resources.addImage("motivate05", "images/Blase11_500x500x1.png");
+  resources.addImage("motivate06", "images/Blase12_500x500x1.png");
+  resources.addImage("motivate07", "images/Blase13_500x500x1.png");
   resources.addImage("countdown", "images/countdown_800x800x3.png");
   resources.addImage("hamsterdriveTitle", "images/hamsterdrive_341x45x1.png");
   resources.addImage("hamsterDriveUnit", "images/hamster-unit_100x100x2.png");
