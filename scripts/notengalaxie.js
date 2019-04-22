@@ -2,11 +2,25 @@
   // ----- Global variables -------------------------------
   var lastTimeStamp = null;
   var resources;
+  var audioCache = {};
   var canvas;
   var gamePhase;
   var levelCreator;
+  var gameStatusCreator;
 
-  
+  // --------------------------------------------------------------------------
+  function setupAudioCache()
+  {
+    audioCache["c1"] = new Howl({src: ["audio/c1.mp3"]});
+    audioCache["d"] = new Howl({src: ["audio/d.mp3"]});
+    audioCache["e"] = new Howl({src: ["audio/e.mp3"]});
+    audioCache["f"] = new Howl({src: ["audio/f.mp3"]});
+    audioCache["g"] = new Howl({src: ["audio/g.mp3"]});
+    audioCache["a"] = new Howl({src: ["audio/a.mp3"]});
+    audioCache["h"] = new Howl({src: ["audio/h.mp3"]});
+    audioCache["c2"] = new Howl({src: ["audio/c2.mp3"]});  
+  }
+
   // --------------------------------------------------------------------------
   function handleMouseMove(e)
   {
@@ -43,6 +57,7 @@
         // hack to convince Safari and other browsers to play audio
         dummyAudio = new Audio("audio/silence.mp3");
         dummyAudio.play();
+        setupAudioCache();
       }
     }
 
@@ -477,8 +492,8 @@
     canvas.addEventListener("touchstart", handleMouseDown);
     canvas.addEventListener("mousedown", handleMouseDown);
 
-    levelCreator = new LevelCreator(levelDefinitions, resources)
-    gameStatusCreator = new GameStatusCreator(levelDefinitions, resources)
+    levelCreator = new LevelCreator(levelDefinitions, resources, audioCache)
+    gameStatusCreator = new GameStatusCreator(levelDefinitions, resources, audioCache)
   
     gameLoop();
   }

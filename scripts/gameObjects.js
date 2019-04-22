@@ -32,7 +32,7 @@ function Planet(options)
   this.gone = function()
   {
     if (this.y >= this.maxY) {
-      this.audio.pause();
+      this.audio.stop();
       return true;
     }
     else {
@@ -217,6 +217,7 @@ function OrbitPlanet(options)
 function SunSystem(options)
 {
   this.resources = options.resources
+  this.audioCache = options.audioCache
   this.levelDef = options.levelDef
   this.x = options.x;
   this.y = options.y;
@@ -276,7 +277,7 @@ function SunSystem(options)
         x: this.x + 148,
         y: this.y + 60,
         orbitTime : this.planetsOrbitTime,
-        audio: new Audio("audio/" + this.levelDef.planets[this.activePlanets].audioKey + ".mp3"),
+        audio: this.audioCache[this.levelDef.planets[this.activePlanets].audioKey],
         play: this.addPlanetWithSound
       });
       addedObj = this.scene[imageKey];

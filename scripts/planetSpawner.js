@@ -16,7 +16,7 @@ function PlanetSpawner(minSpawnTime, images, audios, xPositions, yPosition, scen
       if (this.timeSinceLastSpawn > this.minSpawnTime) {
         var choice = this.getRandomIndex();
         var img = this.images[choice];
-        var audio = new Audio(this.audios[choice]);
+        var audio = this.audios[choice];
         var yPosition = this.yPosition;
         if (this.scene.scoreBar) {
           yPosition -= this.scene.scoreBar.getScore() * 10;

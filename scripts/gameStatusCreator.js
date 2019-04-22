@@ -1,4 +1,4 @@
-function GameStatusCreator(levelDefinitions, resources)
+function GameStatusCreator(levelDefinitions, resources, audioCache)
 {
   this.getGridPositions = function(rows, columns, cellWidth, cellHeight)
   {
@@ -27,6 +27,7 @@ function GameStatusCreator(levelDefinitions, resources)
 
   this.levelDefinitions = levelDefinitions;
   this.resources = resources;
+  this.audioCache = audioCache;
   this.gridPositions = this.getGridPositions(4, 3, 160, 160)
 
   this.getScene = function(curLevelIdx, nextLevelIdx)
@@ -110,6 +111,7 @@ function GameStatusCreator(levelDefinitions, resources)
       objKey = "sun" + i
       scene[objKey] = new SunSystem({
         resources: this.resources,
+        audioCache: this.audioCache,
         levelDef: this.levelDefinitions[i],
         x: levelPosition.x,
         y: levelPosition.y
