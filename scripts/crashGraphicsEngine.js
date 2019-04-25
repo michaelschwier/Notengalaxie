@@ -469,16 +469,16 @@ function Button(options, command)
   }
 
   // This is actually a hack, probably the ship should listen to these events
-  this.handleTouchMove = function(e)
+  this.handleTouchMove = function(pos)
   { 
-    if (this.isHit(e.canvasX, e.canvasY)) {
+    if (this.isHit(pos.canvasX, pos.canvasY)) {
       this.command.execute();
     }
   }
 
-  this.handleMouseDown = function(e)
+  this.handleMouseDown = function(pos)
   { 
-    if (this.isHit(e.canvasX, e.canvasY)) {
+    if (this.isHit(pos.canvasX, pos.canvasY)) {
       this.buttonReleaseCountDown = this.buttonReleaseTime;
       this.command.execute();
     }

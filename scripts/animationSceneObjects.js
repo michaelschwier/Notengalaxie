@@ -18,9 +18,9 @@ function AnimationSequence(animationList, playBackgroundAudio = false)
     this.lastAnimationIdx += 1;
   }
 
-  this.handleMouseDown = function(e)
+  this.handleMouseDown = function(pos)
   {
-    this.animationList[this.currAnimationIdx].handleMouseDown(e)
+    this.animationList[this.currAnimationIdx].handleMouseDown(pos)
   }
   
   this.update = function(frameTime = 0)
@@ -97,7 +97,7 @@ function PortrashTalks(speechBubbleIds, resources)
     }
   }
 
-  this.handleMouseDown = function(e)
+  this.handleMouseDown = function(pos)
   {
     this.timePassed = this.timePerSpeechBubble;
   }
@@ -142,7 +142,7 @@ function Countdown(resources)
   });
   this.countdown.play();
 
-  this.handleMouseDown = function(e)
+  this.handleMouseDown = function(pos)
   {
   }
   
@@ -181,7 +181,7 @@ function HamsterToken(resources)
   });
   this.hamster.playLoop(4, true);
 
-  this.handleMouseDown = function(e)
+  this.handleMouseDown = function(pos)
   {
   }
   
@@ -231,7 +231,7 @@ function HamsterDriveStatus(finishedLevel, resources)
   }
   this.units[finishedLevel].playLoop(6);
 
-  this.handleMouseDown = function(e)
+  this.handleMouseDown = function(pos)
   {
   }
   

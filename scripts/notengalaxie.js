@@ -22,30 +22,59 @@
   }
 
   // --------------------------------------------------------------------------
-  function addCanvasPositionToEvent(e)
+  function getTouchClientPosition(e)
+  {
+    var touchPos = {};
+    touchPos.valid = false;
+    if (e.targetTouches.length == 1) {
+      var touch = event.targetTouches[0];
+      touchPos.clientX = touch.clientX;
+      touchPos.clientY = touch.clientY
+      touchPos.valid = true;
+    }
+    return touchPos;
+  }
+  
+  function getCanvasPosition(e)
   {
     var clientRect = canvas.getBoundingClientRect();
     x = e.clientX - clientRect.left;
     y = e.clientY - clientRect.top;
     x *= canvas.width / clientRect.width;
     y *= canvas.height / clientRect.height;
-    e.canvasX = x;
-    e.canvasY = y;
-    return e;
+    var position = {};
+    position.canvasX = x;
+    position.canvasY = y;
+    return position;
   }
   
   function handleTouchMove(e)
   {
     e.preventDefault();
-    e = addCanvasPositionToEvent(e);
-    gamePhase.handleTouchMove(e);
+    touchPos = getTouchClientPosition(e)
+    if (touchPos.valid) {
+      pos = getCanvasPosition(touchPos);
+      console.log("touchmove", pos.canvasX, pos.canvasY);
+      gamePhase.handleTouchMove(pos);
+    }
+  }
+
+  function handleTouchStart(e)
+  {
+    e.preventDefault();
+    touchPos = getTouchClientPosition(e)
+    if (touchPos.valid) {
+      pos = getCanvasPosition(touchPos);
+      console.log("touchstart", pos.canvasX, pos.canvasY);
+      gamePhase.handleMouseDown(pos);
+    }
   }
 
   function handleMouseDown(e)
   {
     e.preventDefault();
-    e = addCanvasPositionToEvent(e);
-    gamePhase.handleMouseDown(e);
+    pos = getCanvasPosition(e);
+    gamePhase.handleMouseDown(pos);
   }
   
   // --------------------------------------------------------------------------
@@ -55,10 +84,10 @@
     document.getElementById("gameContainer").style.backgroundColor="white";
     document.getElementById("gameContainer").style.backgroundImage="url(\"images/title-01.png\")"; 
 
-    this.handleTouchMove = function(e)
+    this.handleTouchMove = function(pos)
     { }
 
-    this.handleMouseDown = function(e)
+    this.handleMouseDown = function(pos)
     { 
       if (delayUntilTitle < 0) {
         document.getElementById("gameContainer").style.backgroundImage="none"; 
@@ -99,23 +128,23 @@
   {
     this.scene = scene;
 
-    this.handleTouchMove = function(e)
+    this.handleTouchMove = function(pos)
     { 
       for (var key in this.scene) {
         if (this.scene[key]) {
           if ("handleTouchMove" in this.scene[key]) {
-            this.scene[key].handleTouchMove(e);
+            this.scene[key].handleTouchMove(pos);
           }
         }
       }
     }
 
-    this.handleMouseDown = function(e)
+    this.handleMouseDown = function(pos)
     { 
       for (var key in this.scene) {
         if (this.scene[key]) {
           if ("handleMouseDown" in this.scene[key]) {
-            this.scene[key].handleMouseDown(e);
+            this.scene[key].handleMouseDown(pos);
           }
         }
       }
@@ -244,14 +273,14 @@
     GamePhase.call(this, scene);
 
     this.super_handleMouseDown = this.handleMouseDown;
-    this.handleMouseDown = function(e)
+    this.handleMouseDown = function(pos)
     { 
       if (scene.portcrash.isDone()) {
         window.open("https://portcrash.de/bastelanleitung/");
         restartGame = true;
       }
       else {
-        this.super_handleMouseDown(e)
+        this.super_handleMouseDown(pos)
       }
     }
 
@@ -439,7 +468,7 @@
       return;
     }
 
-    this.handleMouseDown = function(e)
+    this.handleMouseDown = function(pos)
     {
       if (animationDone) {
         startLevel = true;
@@ -505,7 +534,7 @@
     gamePhase = new IntroPhase();
 
     canvas.addEventListener("touchmove", handleTouchMove);
-    canvas.addEventListener("touchstart", handleMouseDown);
+    canvas.addEventListener("touchstart", handleTouchStart);
     canvas.addEventListener("mousedown", handleMouseDown);
 
     levelCreator = new LevelCreator(levelDefinitions, resources, audioCache)
