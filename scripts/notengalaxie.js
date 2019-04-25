@@ -54,7 +54,6 @@
     touchPos = getTouchClientPosition(e)
     if (touchPos.valid) {
       pos = getCanvasPosition(touchPos);
-      console.log("touchmove", pos.canvasX, pos.canvasY);
       gamePhase.handleTouchMove(pos);
     }
   }
@@ -65,7 +64,6 @@
     touchPos = getTouchClientPosition(e)
     if (touchPos.valid) {
       pos = getCanvasPosition(touchPos);
-      console.log("touchstart", pos.canvasX, pos.canvasY);
       gamePhase.handleMouseDown(pos);
     }
   }
