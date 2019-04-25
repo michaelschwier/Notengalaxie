@@ -297,12 +297,16 @@ function AbstractLinearMover(sprite, timeForMove)
   this.timeForMove = timeForMove;
   this.startPosX = sprite.x;
   this.startPosY = sprite.y;
+  this.currTargetPosX = this.startPosX;
+  this.currTargetPosY = this.startPosY;
   this.moveVectorX = 0;
   this.moveVectorY = 0;
   this.currMoveTime = this.timeForMove;
 
   this.setNewTargetPos = function(x, y)
   {
+    this.currTargetPosX = x;
+    this.currTargetPosY = y;  
     this.startPosX = this.sprite.x;
     this.startPosY = this.sprite.y;  
     this.moveVectorX = x - this.sprite.x;
@@ -310,6 +314,11 @@ function AbstractLinearMover(sprite, timeForMove)
     if ((this.moveVectorX != 0) || (this.moveVectorY != 0)) {
       this.currMoveTime = 0.0;
     }
+  }
+
+  this.currentTargetPosEquals = function(x, y)
+  {
+    return ((this.currTargetPosX == x) && (this.currTargetPosY == y))
   }
 
   this.getMoveVectorRatio = function()
@@ -456,6 +465,14 @@ function Button(options, command)
     }
     else {
       return false;
+    }
+  }
+
+  // This is actually a hack, probably the ship should listen to these events
+  this.handleTouchMove = function(e)
+  { 
+    if (this.isHit(e.canvasX, e.canvasY)) {
+      this.command.execute();
     }
   }
 

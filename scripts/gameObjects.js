@@ -81,7 +81,9 @@ function Ship(options)
 
   this.moveTo = function(x, y)
   {
-    this.mover.setNewTargetPos(x, y);
+    if (!this.mover.currentTargetPosEquals(x,y)) {
+      this.mover.setNewTargetPos(x, y);
+    }
   }
 
   this.isWaiting = function()

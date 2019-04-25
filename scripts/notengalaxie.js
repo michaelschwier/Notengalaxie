@@ -22,12 +22,7 @@
   }
 
   // --------------------------------------------------------------------------
-  function handleMouseMove(e)
-  {
-    gamePhase.handleMouseMove(e);
-  }
-
-  function handleMouseDown(e)
+  function addCanvasPositionToEvent(e)
   {
     var clientRect = canvas.getBoundingClientRect();
     x = e.clientX - clientRect.left;
@@ -36,6 +31,20 @@
     y *= canvas.height / clientRect.height;
     e.canvasX = x;
     e.canvasY = y;
+    return e;
+  }
+  
+  function handleTouchMove(e)
+  {
+    e.preventDefault();
+    e = addCanvasPositionToEvent(e);
+    gamePhase.handleTouchMove(e);
+  }
+
+  function handleMouseDown(e)
+  {
+    e.preventDefault();
+    e = addCanvasPositionToEvent(e);
     gamePhase.handleMouseDown(e);
   }
   
@@ -46,7 +55,7 @@
     document.getElementById("gameContainer").style.backgroundColor="white";
     document.getElementById("gameContainer").style.backgroundImage="url(\"images/title-01.png\")"; 
 
-    this.handleMouseMove = function(e)
+    this.handleTouchMove = function(e)
     { }
 
     this.handleMouseDown = function(e)
@@ -90,8 +99,16 @@
   {
     this.scene = scene;
 
-    this.handleMouseMove = function(e)
-    { }
+    this.handleTouchMove = function(e)
+    { 
+      for (var key in this.scene) {
+        if (this.scene[key]) {
+          if ("handleTouchMove" in this.scene[key]) {
+            this.scene[key].handleTouchMove(e);
+          }
+        }
+      }
+    }
 
     this.handleMouseDown = function(e)
     { 
@@ -487,8 +504,7 @@
 
     gamePhase = new IntroPhase();
 
-    canvas.addEventListener("touchmove", handleMouseMove);
-    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("touchmove", handleTouchMove);
     canvas.addEventListener("touchstart", handleMouseDown);
     canvas.addEventListener("mousedown", handleMouseDown);
 
