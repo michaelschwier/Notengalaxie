@@ -61,7 +61,7 @@ function Ship(options)
     numberOfFrames: 2,
     updateRate: 0.07
   });
-  this.mover = new SmoothMover(this, options.moveTime || 0.5)
+  this.mover = new SmoothMover(this, options.moveTime || 0.3)
   this.blinkTime = 0.7;
   this.currBlinkTime = this.blinkTime;
   
