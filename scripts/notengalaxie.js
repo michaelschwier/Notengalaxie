@@ -1,5 +1,6 @@
 (function() {
   // ----- Global variables -------------------------------
+  var language = "de"
   var lastTimeStamp = null;
   var resources;
   var audioCache = {};
@@ -105,7 +106,7 @@
     this.render = function()
     {
       if (delayUntilTitle == 0) {
-        document.getElementById("gameContainer").style.backgroundImage="url(\"images/title-02.png\")";
+        document.getElementById("gameContainer").style.backgroundImage="url(\"images/" + language + "/title-02.png\")";
       }
     }
 
@@ -544,6 +545,17 @@
   // --------------------------------------------------------------------------
   // START
   // --------------------------------------------------------------------------
+  if (document.getElementById("gameContainer").hasAttribute("lang")) {
+    language = document.getElementById("gameContainer").getAttribute("lang");
+    if (language.startsWith("de")) {
+      language = "de";
+    }
+    else {
+      language = "en";
+    }
+    // console.log("Switching language to", language)
+  }
+  // Language agnostic images
   resources = new ResourcePreLoader();
   resources.addImage("hamster", "images/hamster_100x74x2.png")  
   resources.addImage("button", "images/button_200x149x2.png")
@@ -570,23 +582,24 @@
   resources.addImage("finish", "images/pokal_200x200x2.png");
   resources.addImage("finishBlink", "images/pokal-blink_200x200x2.png");
   resources.addImage("portcrashExplain", "images/portcrash_400x650x2.png");
-  resources.addImage("explain01", "images/Blase01_800x800x1.png");
-  resources.addImage("explain02", "images/Blase02_800x800x1.png");
-  resources.addImage("explain03", "images/Blase03_800x800x1.png");
-  resources.addImage("explain04", "images/Blase04_800x800x1.png");
-  resources.addImage("explain05", "images/Blase04a_500x500x1.png");
-  resources.addImage("explain06", "images/Blase05_800x800x1.png");
-  resources.addImage("motivate01", "images/Blase06_500x500x1.png");
-  resources.addImage("motivate02", "images/Blase07_500x500x1.png");
-  resources.addImage("motivate03", "images/Blase08_500x500x1.png");
-  resources.addImage("motivate04", "images/Blase10_500x500x1.png");
-  resources.addImage("motivate05", "images/Blase11_500x500x1.png");
-  resources.addImage("motivate06", "images/Blase12_500x500x1.png");
-  resources.addImage("motivate07", "images/Blase13_500x500x1.png");
-  resources.addImage("countdown", "images/countdown_800x800x3.png");
-  resources.addImage("hamsterdriveTitle", "images/hamsterdrive_341x45x1.png");
   resources.addImage("hamsterDriveUnit", "images/hamster-unit_100x100x2.png");
   resources.addImage("hamsterToken", "images/hamster-unit_800x800x2.png");
+  // Translated Images
+  resources.addImage("explain01", "images/" + language + "/Blase01_800x800x1.png");
+  resources.addImage("explain02", "images/" + language + "/Blase02_800x800x1.png");
+  resources.addImage("explain03", "images/" + language + "/Blase03_800x800x1.png");
+  resources.addImage("explain04", "images/" + language + "/Blase04_800x800x1.png");
+  resources.addImage("explain05", "images/" + language + "/Blase04a_500x500x1.png");
+  resources.addImage("explain06", "images/" + language + "/Blase05_800x800x1.png");
+  resources.addImage("motivate01", "images/" + language + "/Blase06_500x500x1.png");
+  resources.addImage("motivate02", "images/" + language + "/Blase07_500x500x1.png");
+  resources.addImage("motivate03", "images/" + language + "/Blase08_500x500x1.png");
+  resources.addImage("motivate04", "images/" + language + "/Blase10_500x500x1.png");
+  resources.addImage("motivate05", "images/" + language + "/Blase11_500x500x1.png");
+  resources.addImage("motivate06", "images/" + language + "/Blase12_500x500x1.png");
+  resources.addImage("motivate07", "images/" + language + "/Blase13_500x500x1.png");
+  resources.addImage("countdown", "images/" + language + "/countdown_800x800x3.png");
+  resources.addImage("hamsterdriveTitle", "images/" + language + "/hamsterdrive_341x45x1.png");
   resources.loadAndCallWhenDone(initGame);
 } ());
 
