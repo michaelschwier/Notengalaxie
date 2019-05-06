@@ -2,39 +2,30 @@
   function AudioCrossfadeLooper(options)
   {
     this.audio = [];
-    this.audio[0] = new Audio(options.audioFileName);
-    this.audio[1] = new Audio(options.audioFileName);
+    this.audio[0] = new Howl({src: [options.audioFileName]});
+    this.audio[1] = new Howl({src: [options.audioFileName]});
     this.fadeStart = options.fadeStart;
-    this.fadeDuration = options.fadeDuration;
+    this.fadeDuration = options.fadeDuration * 1000;
     this.currAudioIdx = 0;
-    this.audio[this.currAudioIdx].play();
+    this.mainAudioId = this.audio[this.currAudioIdx].play();
 
     this.update = function(frameTime)
     {
-      currAudio = this.audio[this.currAudioIdx]
-      otherAudio = this.audio[1 - this.currAudioIdx]
-      if (currAudio.currentTime > this.fadeStart) {
-        fadeVolume = (currAudio.currentTime - this.fadeStart) / this.fadeDuration;
-        if(fadeVolume < 1.0) {
-          currAudio.volume = 1 - fadeVolume;
-          otherAudio.volume = fadeVolume;
-          if (otherAudio.paused) {
-            otherAudio.play();
-          }
-        }
-        else {
-          currAudio.pause();
-          currAudio.currentTime = 0.0;
-          this.currAudioIdx = 1 - this.currAudioIdx;
-        }
+      currAudio = this.audio[this.currAudioIdx];
+      otherAudio = this.audio[1 - this.currAudioIdx];
+      if (currAudio.seek(this.mainAudioId) > this.fadeStart) {
+        currAudio.fade(1.0, 0.0, this.fadeDuration, this.mainAudioId);
+        otherAudio.volume(0.0);
+        this.mainAudioId = otherAudio.play();
+        otherAudio.fade(0.0, 1.0, this.fadeDuration, this.mainAudioId);
+        this.currAudioIdx = 1 - this.currAudioIdx;
       }
     }
 
     this.stop = function()
     {
-      currAudio = this.audio[this.currAudioIdx]
-      currAudio.pause();
-      currAudio.currentTime = 0.0;
+      this.audio[0].stop();
+      this.audio[1].stop();
     }
   }
 
