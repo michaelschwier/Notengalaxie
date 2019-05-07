@@ -551,7 +551,7 @@
       language = "de";
     }
     else {
-      language = "en";
+      language = "de";
     }
     // console.log("Switching language to", language)
   }
