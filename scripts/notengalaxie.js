@@ -545,16 +545,8 @@
   // --------------------------------------------------------------------------
   // START
   // --------------------------------------------------------------------------
-  if (document.getElementById("gameContainer").hasAttribute("lang")) {
-    language = document.getElementById("gameContainer").getAttribute("lang");
-    if (language.startsWith("de")) {
-      language = "de";
-    }
-    else {
-      language = "de";
-    }
-    // console.log("Switching language to", language)
-  }
+  language = getLanguage()
+  console.log("Switching game language to", language)
   // Language agnostic images
   resources = new ResourcePreLoader();
   resources.addImage("hamster", "images/hamster_100x74x2.png")  
