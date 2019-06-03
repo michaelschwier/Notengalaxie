@@ -30,7 +30,7 @@ getLanguage = function()
   if (language == "") {
     language = navigator.language || navigator.userLanguage;
   }
-  console.log("Found language ", language)
+  console.log("Found language", language)
   if (language.startsWith("de")) {
     language = "de";
   }
