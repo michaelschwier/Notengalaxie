@@ -10,7 +10,7 @@ body {
 	position: relative;
 	background-color: white;
 	background-image: url("../images/title-01.png");
-	background-size: contain;
+	background-size: 100%;
 	background-repeat: no-repeat;
 	height:99vh;
 	width:80vh;
