@@ -275,7 +275,12 @@
     this.handleMouseDown = function(pos)
     { 
       if (scene.portcrash.isDone()) {
-        window.open("https://portcrash.de/bastelanleitung/");
+        if (language == "de") {
+          window.open("https://portcrash.de/bastelanleitung/");
+        }
+        else {
+          window.open("https://portcrash.de/crafting-instructions/");
+        }
         restartGame = true;
       }
       else {
