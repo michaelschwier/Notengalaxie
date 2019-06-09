@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="de.portcrash.notengalaxie" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="de.portcrash.notengalaxie" version="1.0.7" versionCode="10007" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Notengalaxie</name>
     <description>
         Notengalaxie EduGame.
@@ -8,5 +8,6 @@
         Portcrash - Gamified Education
     </author>
     <content src="index.html" />
-    <access origin="*" />
+	<icon src="icon.png" />
+    <access origin="http://*.portcrash.de" />
 </widget>
