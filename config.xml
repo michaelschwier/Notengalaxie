@@ -9,5 +9,9 @@
     </author>
     <content src="index.html" />
 	<icon src="icon.png" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~3.0.0" />
+    <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
     <access origin="http://*.portcrash.de" />
+    <allow-navigation href="http://*.portcrash.de/*" />
+    <allow-intent href="http://*.portcrash.de/*" />
 </widget>
