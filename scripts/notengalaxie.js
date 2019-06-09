@@ -579,7 +579,7 @@
   window.addEventListener('orientationchange', resizeGame);
 
   if(document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1) {
-    isPhoneGapApp = True;
+    isPhoneGapApp = true;
     console.log("Detected as Mobile App (URL " + document.URL + ")");
   }
   else {
