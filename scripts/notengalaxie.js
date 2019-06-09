@@ -23,6 +23,26 @@
   }
 
   // --------------------------------------------------------------------------
+  function resizeGame()
+  {
+    var gameContainer = document.getElementById('gameContainer');
+    var referenceWidthToHeight = 800 / 1000;
+    var newWidth = window.innerWidth;
+    var newHeight = window.innerHeight;
+    var newWidthToHeight = newWidth / newHeight;
+    console.log(newWidthToHeight)
+    
+    if (newWidthToHeight > referenceWidthToHeight) {
+        gameContainer.style.height = '100vh';
+        gameContainer.style.width = '80vh';
+    } 
+    else {
+      gameContainer.style.height = '125vw';
+      gameContainer.style.width = '100vw';
+    }
+  }
+
+  // --------------------------------------------------------------------------
   function getTouchClientPosition(e)
   {
     var touchPos = {};
@@ -30,7 +50,7 @@
     if (e.targetTouches.length == 1) {
       var touch = event.targetTouches[0];
       touchPos.clientX = touch.clientX;
-      touchPos.clientY = touch.clientY
+      touchPos.clientY = touch.clientY;
       touchPos.valid = true;
     }
     return touchPos;
@@ -550,6 +570,10 @@
   // --------------------------------------------------------------------------
   // START
   // --------------------------------------------------------------------------
+  resizeGame();
+  window.addEventListener('resize', resizeGame);
+  window.addEventListener('orientationchange', resizeGame);
+
   language = getLanguage()
   console.log("Switching game language to", language)
   // Language agnostic images
