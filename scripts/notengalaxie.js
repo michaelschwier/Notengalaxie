@@ -1,6 +1,7 @@
 (function() {
   // ----- Global variables -------------------------------
   var language = "de"
+  var isPhoneGapApp = false;
   var lastTimeStamp = null;
   var resources;
   var audioCache = {};
@@ -30,7 +31,6 @@
     var newWidth = window.innerWidth;
     var newHeight = window.innerHeight;
     var newWidthToHeight = newWidth / newHeight;
-    console.log(newWidthToHeight)
     
     if (newWidthToHeight > referenceWidthToHeight) {
         gameContainer.style.height = '100vh';
@@ -295,11 +295,15 @@
     this.handleMouseDown = function(pos)
     { 
       if (scene.portcrash.isDone()) {
-        if (language == "de") {
-          window.open("https://portcrash.de/bastelanleitung/", "_system");
+        instructionsUrl = "https://portcrash.de/bastelanleitung/";
+        if (language == "en") {
+          instructionsUrl = "https://portcrash.de/crafting-instructions/"
+        }
+        if (isPhoneGapApp) {
+          navigator.app.loadUrl(instructionsUrl, { openExternal:true });
         }
         else {
-          window.open("https://portcrash.de/crafting-instructions/", "_system");
+          window.open(instructionsUrl);
         }
         restartGame = true;
       }
@@ -573,6 +577,14 @@
   resizeGame();
   window.addEventListener('resize', resizeGame);
   window.addEventListener('orientationchange', resizeGame);
+
+  if(document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1) {
+    isPhoneGapApp = True;
+    console.log("Detected as Mobile App (URL " + document.URL + ")");
+  }
+  else {
+    console.log("Detected as Web App (URL " + document.URL + ")");
+  }
 
   language = getLanguage()
   console.log("Switching game language to", language)
