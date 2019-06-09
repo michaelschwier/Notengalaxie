@@ -296,10 +296,10 @@
     { 
       if (scene.portcrash.isDone()) {
         if (language == "de") {
-          window.open("https://portcrash.de/bastelanleitung/");
+          window.open("https://portcrash.de/bastelanleitung/", "_system");
         }
         else {
-          window.open("https://portcrash.de/crafting-instructions/");
+          window.open("https://portcrash.de/crafting-instructions/", "_system");
         }
         restartGame = true;
       }
