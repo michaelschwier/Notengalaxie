@@ -578,14 +578,6 @@
   window.addEventListener('resize', resizeGame);
   window.addEventListener('orientationchange', resizeGame);
 
-  if(document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1) {
-    isPhoneGapApp = true;
-    console.log("Detected as Mobile App (URL " + document.URL + ")");
-  }
-  else {
-    console.log("Detected as Web App (URL " + document.URL + ")");
-  }
-
   language = getLanguage()
   console.log("Switching game language to", language)
   // Language agnostic images
