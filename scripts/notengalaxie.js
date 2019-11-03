@@ -272,7 +272,7 @@
     this.getNextGamePhase = function()
     { 
       if (scene.animationSequence.isDone()) {
-        return new GameStatusPhase(8, 9);//(-1, 0);
+        return new GameStatusPhase(-1, 0);
       }
       else {
         return this;
