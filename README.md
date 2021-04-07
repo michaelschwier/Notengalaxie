@@ -9,6 +9,6 @@ Please play the [official release at portcrash.de](https://portcrash.de/spiele/n
 
 #### Debug/work-in-progress deployments
 
-[Normal Speed](https://michaelschwier.github.io/Notengalaxie/index.html)   
-[Faster Version](https://michaelschwier.github.io/Notengalaxie/index.html?speed=2) (for adults)    
+[Normal Speed](https://michaelschwier.github.io/Notengalaxie/index.html) (for kids)   
+[Faster Version](https://michaelschwier.github.io/Notengalaxie/index.html?speed=2) (for teens and adults)    
 [Super Fast Version](https://michaelschwier.github.io/Notengalaxie/index.html?speed=3) (for impatient developers)    
