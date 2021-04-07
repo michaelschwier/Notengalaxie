@@ -5,7 +5,7 @@ Ear training game for kids. With pirates. In space!
 
 ## Play
 
-Please play the [official release at portcrash.de](https://portcrash.de/spiele/notengalaxie/)
+Please play the [official release at portcrash.de](https://portcrash.de/spiele/notengalaxie/) (NOTE: currently offline due to major construction work on the Portcrash website, to be back soon. In the meanwhile feel free to check out the development version below).
 
 #### Debug/work-in-progress deployments
 
